@@ -3,7 +3,7 @@
 <head>
 <!-- TrueNorth Financial Services — Technology-Enabled Bookkeeping & Finance Operations. Single-file cinematic homepage. -->
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>TrueNorth Financial Services — Finance Operations, Engineered for Accuracy</title>
 <meta name="description" content="TrueNorth Financial Services delivers accurate, dependable, technology-enabled bookkeeping and finance operations support for businesses across Canada, the United States, the United Kingdom and Australia — built on governance, confidentiality and operational excellence.">
 <meta name="theme-color" content="#070C1B">
@@ -36,6 +36,15 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;1,9..144,400;1,9..144,500&family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<!-- Preload the hero's third-party scripts so the browser starts fetching them
+     in parallel with HTML parsing instead of only discovering them once it
+     reaches the bottom of a ~90KB document. They still execute at their
+     original position at the end of <body>, so behavior is unchanged — this
+     only shortens the time-to-interactive for the hero animation. -->
+<link rel="preload" as="script" href="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js">
+<link rel="preload" as="script" href="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js">
+<link rel="preload" as="script" href="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js">
 
 <!-- JSON-LD structured data -->
 <script type="application/ld+json">
@@ -156,7 +165,8 @@ img{max-width:100%;display:block}
 @media (pointer:coarse){.cursor,.cursor-dot{display:none}}
 
 /* ===== Nav ===== */
-header.nav{position:fixed;top:0;left:0;right:0;z-index:500;padding:24px clamp(20px,5vw,64px);
+header.nav{position:fixed;top:0;left:0;right:0;z-index:500;
+  padding:calc(24px + env(safe-area-inset-top)) calc(clamp(20px,5vw,64px) + env(safe-area-inset-right)) 24px calc(clamp(20px,5vw,64px) + env(safe-area-inset-left));
   display:flex;align-items:center;justify-content:space-between;
   background:color-mix(in srgb,var(--bg) 32%,transparent);backdrop-filter:blur(10px);
   transition:padding .5s var(--ease-soft),background .5s var(--ease-soft),backdrop-filter .5s,border-color .5s;
@@ -192,7 +202,8 @@ header.nav.scrolled{padding:14px clamp(20px,5vw,64px);background:color-mix(in sr
 .burger[aria-expanded="true"] span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
 .mobile-menu{position:fixed;inset:0;z-index:480;background:color-mix(in srgb,var(--bg) 96%,transparent);
   backdrop-filter:blur(24px);display:flex;flex-direction:column;justify-content:center;gap:8px;
-  padding:32px clamp(20px,8vw,64px);opacity:0;pointer-events:none;transform:translateY(-12px);
+  padding:calc(32px + env(safe-area-inset-top)) calc(clamp(20px,8vw,64px) + env(safe-area-inset-right)) calc(32px + env(safe-area-inset-bottom)) calc(clamp(20px,8vw,64px) + env(safe-area-inset-left));
+  opacity:0;pointer-events:none;transform:translateY(-12px);
   transition:opacity .4s var(--ease-soft),transform .45s var(--ease-soft)}
 .mobile-menu.open{opacity:1;pointer-events:auto;transform:translateY(0)}
 .mobile-menu a{font-family:var(--serif);font-size:clamp(28px,9vw,42px);font-weight:400;padding:14px 0;
@@ -374,6 +385,7 @@ input[type="range"]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;b
 .cta-shell h2 em{font-family:var(--serif);font-style:italic;font-weight:400;color:var(--gold-text)}
 .form{background:linear-gradient(160deg,var(--card-hi),var(--card));backdrop-filter:blur(var(--blur-glass));border:1px solid var(--card-line);border-radius:24px;padding:clamp(28px,4vw,42px);box-shadow:var(--shadow)}
 .form .grp{margin-bottom:20px}
+.hp-field{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;margin:0}
 .form label{display:block;font-size:13px;font-weight:600;margin-bottom:9px;color:var(--muted)}
 .form input,.form select{width:100%;background:var(--glass);border:1px solid var(--card-line);border-radius:12px;padding:14px 16px;color:var(--fg);font-family:inherit;font-size:15px;transition:border-color .3s,box-shadow .3s}
 .form input:focus,.form select:focus{border-color:var(--royal);outline:none;box-shadow:0 0 0 4px color-mix(in srgb,var(--royal) 16%,transparent)}
@@ -816,6 +828,7 @@ footer{border-top:1px solid var(--line);padding:clamp(60px,7vw,90px) clamp(20px,
         </div>
       </div>
       <form class="form reveal" id="lead" novalidate>
+        <div class="grp hp-field" aria-hidden="true"><label for="f-hp">Leave this field empty</label><input id="f-hp" name="company_website" type="text" tabindex="-1" autocomplete="off"></div>
         <div class="grp"><label for="f-name">Full name</label><input id="f-name" type="text" required placeholder="Jane Okafor" aria-describedby="f-name-err"><span class="err" id="f-name-err" role="alert"></span></div>
         <div class="row2">
           <div class="grp"><label for="f-email">Work email</label><input id="f-email" type="email" required placeholder="jane@company.com" aria-describedby="f-email-err"><span class="err" id="f-email-err" role="alert"></span></div>
@@ -862,10 +875,29 @@ footer{border-top:1px solid var(--line);padding:clamp(60px,7vw,90px) clamp(20px,
   </div>
 </footer>
 
+<!-- If JavaScript is disabled entirely, .reveal elements would otherwise stay
+     at opacity:0 forever since only GSAP ever animates them in. -->
+<noscript><style>.reveal{opacity:1!important;transform:none!important;filter:none!important}</style></noscript>
+
 <!-- ============ LIBS ============ -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+  // Safety net: if the cdnjs CDN is blocked, slow to time out, or fails for any
+  // other reason, `gsap` never becomes defined and the big script block below
+  // would throw immediately — leaving every .reveal element permanently at
+  // opacity:0 (i.e. most of the page's content invisible). Detect that case
+  // here and force everything visible via plain CSS instead of relying on JS
+  // animation, so the page degrades to "static but fully readable" rather
+  // than "blank sections" when a third-party script fails.
+  if (typeof window.gsap === 'undefined' || typeof window.ScrollTrigger === 'undefined') {
+    console.warn('[truenorth] GSAP/ScrollTrigger failed to load — falling back to static layout.');
+    var s = document.createElement('style');
+    s.textContent = '.reveal{opacity:1!important;transform:none!important;filter:none!important}';
+    document.head.appendChild(s);
+  }
+</script>
 
 <script>
 const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1121,6 +1153,7 @@ window.addEventListener('resize', debounce(()=>{
   const btnInner=submitBtn.querySelector('.inner');
   const formErr=document.getElementById('formerr');
   const originalBtnLabel=btnInner.textContent;
+  const renderedAt=Date.now();
   let isSubmitting=false;
 
   form.addEventListener('submit',async e=>{
@@ -1161,7 +1194,9 @@ window.addEventListener('resize', debounce(()=>{
           email:email.value.trim(),
           company:document.getElementById('f-company').value.trim(),
           country:document.getElementById('f-country').value,
-          service:document.getElementById('f-service').value
+          service:document.getElementById('f-service').value,
+          company_website:document.getElementById('f-hp').value,
+          elapsedMs:Date.now()-renderedAt
         })
       });
       let payload={};

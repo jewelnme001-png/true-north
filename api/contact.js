@@ -25,6 +25,26 @@ if (usingSandboxSender) {
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+// Best-effort in-memory rate limiting. Serverless instances are ephemeral and
+// may be recycled or run in parallel, so this is a deterrent against basic
+// abuse from a single warm instance, not a hard guarantee — pair it with the
+// honeypot/timing checks below rather than relying on it alone. For strict
+// guarantees across all instances, move this to a shared store (e.g. Upstash
+// Redis / Vercel KV) keyed by IP.
+const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000; // 10 minutes
+const RATE_LIMIT_MAX = 5; // max submissions per IP per window
+const submissionLog = new Map(); // ip -> array of timestamps
+
+function isRateLimited(ip) {
+  const now = Date.now();
+  const timestamps = (submissionLog.get(ip) || []).filter(t => now - t < RATE_LIMIT_WINDOW_MS);
+  timestamps.push(now);
+  submissionLog.set(ip, timestamps);
+  // Opportunistically trim the map so it doesn't grow unbounded on a long-lived instance.
+  if (submissionLog.size > 5000) submissionLog.clear();
+  return timestamps.length > RATE_LIMIT_MAX;
+}
+
 function escapeHtml(value) {
   return String(value)
     .replace(/&/g, '&amp;')
@@ -58,6 +78,16 @@ module.exports = async function handler(req, res) {
 
   const resend = new Resend(process.env.RESEND_API_KEY);
 
+  const ip = (req.headers['x-forwarded-for'] || req.socket?.remoteAddress || 'unknown')
+    .toString().split(',')[0].trim();
+  if (isRateLimited(ip)) {
+    console.warn(`[contact] Rate limit exceeded for ${ip}`);
+    return res.status(429).json({
+      success: false,
+      message: 'Too many requests. Please wait a few minutes and try again.',
+    });
+  }
+
   // Vercel auto-parses JSON bodies into req.body, but guard against edge
   // cases where it arrives as a raw string (or is missing entirely).
   let body = req.body;
@@ -69,6 +99,19 @@ module.exports = async function handler(req, res) {
     }
   }
   body = body && typeof body === 'object' ? body : {};
+
+  // Honeypot: a field that's invisible and untabbable for real visitors.
+  // Bots that blindly fill every input will trip this. Timing: real people
+  // take at least ~1.5s to read and fill the form; instant submissions are
+  // almost always scripted. Both cases return a fake success so scrapers
+  // don't learn which signal caught them, without ever calling Resend.
+  const honeypotTripped = typeof body.company_website === 'string' && body.company_website.trim() !== '';
+  const elapsedMs = Number(body.elapsedMs);
+  const tooFast = Number.isFinite(elapsedMs) && elapsedMs >= 0 && elapsedMs < 1500;
+  if (honeypotTripped || tooFast) {
+    console.warn(`[contact] Blocked likely-bot submission from ${ip} (honeypot=${honeypotTripped}, tooFast=${tooFast})`);
+    return res.status(200).json({ success: true, message: 'Your request has been sent successfully.' });
+  }
 
   const name = cleanField(body.name, '');
   const email = cleanField(body.email, '');
