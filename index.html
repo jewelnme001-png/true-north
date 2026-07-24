@@ -282,6 +282,16 @@ h2.section-title em{font-family:var(--serif);font-style:italic;font-weight:400;c
 .card:hover .tags b{border-color:color-mix(in srgb,var(--gold) 40%,var(--line));color:var(--fg)}
 .svc-grid .c-lg{grid-column:span 6} .svc-grid .c-md{grid-column:span 4} .svc-grid .c-sm{grid-column:span 3}
 
+/* ===== Progressive disclosure: expandable cards (Services) ===== */
+.card .summary{color:var(--muted);font-size:14.5px;line-height:1.6}
+.card .more-toggle{margin-top:18px;display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-text);background:none;border:0;padding:0;cursor:pointer;position:relative;z-index:2;min-height:24px}
+.card .more-toggle .chev{width:9px;height:9px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(45deg);transition:transform .35s var(--ease)}
+.card.open .more-toggle .chev{transform:rotate(-135deg)}
+.card .more{max-height:0;overflow:hidden;transition:max-height .5s var(--ease)}
+.card .more-inner{padding-top:16px}
+.card .more-inner p{margin:0}
+@media(prefers-reduced-motion:reduce){.card .more{transition:none}}
+
 /* ===== Calculator ===== */
 #calc{background:linear-gradient(180deg,transparent,var(--glass))}
 .calc-shell{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:56px;border:1px solid var(--card-line);border-radius:26px;overflow:hidden;background:linear-gradient(160deg,var(--card-hi),var(--card));backdrop-filter:blur(var(--blur-glass));box-shadow:var(--shadow)}
@@ -334,6 +344,39 @@ input[type="range"]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;b
 .why h3{font-size:20px;font-weight:700;margin-bottom:10px;letter-spacing:-.008em}
 .why p{color:var(--muted);font-size:14.5px;line-height:1.7}
 
+/* #why cards get click-to-expand; #ai reuses .why for static two-up boxes and is untouched */
+#why .why{cursor:pointer}
+#why .why .full{max-height:0;overflow:hidden;transition:max-height .5s var(--ease)}
+#why .why .full-inner{padding-top:2px}
+#why .why .toggle{margin-top:16px;display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-text);background:none;border:0;padding:0;cursor:pointer}
+#why .why .toggle .chev{width:9px;height:9px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(45deg);transition:transform .35s var(--ease)}
+#why .why.open .toggle .chev{transform:rotate(-135deg)}
+@media(prefers-reduced-motion:reduce){#why .why .full{transition:none}}
+
+/* ===== Process: accordion + horizontal desktop timeline ===== */
+.proc{display:flex;flex-direction:column;gap:0}
+.proc .step{display:block;cursor:pointer;border-bottom:1px solid var(--line)}
+.proc .step:last-child{border-bottom:0}
+.proc .step .head{display:grid;grid-template-columns:54px 1fr auto;gap:28px;align-items:center}
+.proc .step .head-text h3{margin:0}
+.proc .step .head-text .when{margin-top:8px}
+.proc .step .chev{width:10px;height:10px;border-right:1.5px solid var(--muted);border-bottom:1.5px solid var(--muted);transform:rotate(45deg);transition:transform .35s var(--ease)}
+.proc .step.open .chev{transform:rotate(-135deg)}
+.proc .step .body{max-height:0;overflow:hidden;transition:max-height .5s var(--ease)}
+.proc .step .body-inner{padding:16px 0 6px 82px}
+@media(prefers-reduced-motion:reduce){.proc .step .body,.proc .step .chev{transition:none}}
+@media(min-width:900px){
+  .proc{flex-direction:row;gap:0;align-items:flex-start}
+  .proc::before{left:0;right:0;top:27px;bottom:auto;height:1px;width:auto}
+  .proc .step{flex:1;padding:0 16px;border-bottom:0;border-right:1px solid var(--line)}
+  .proc .step:last-child{border-right:0}
+  .proc .step .head{grid-template-columns:1fr;justify-items:center;row-gap:16px;text-align:center}
+  .proc .step .head-text{display:contents}
+  .proc .step .head-text h3{font-size:16.5px}
+  .proc .step .head-text .when{order:3}
+  .proc .step .body-inner{padding:16px 4px 4px}
+}
+
 /* ===== Testimonials ===== */
 .tcar{margin-top:56px;position:relative;min-height:280px}
 .tslide{position:absolute;inset:0;opacity:0;transform:translateY(20px);transition:opacity .7s var(--ease),transform .7s var(--ease);pointer-events:none}
@@ -344,10 +387,16 @@ input[type="range"]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;b
 .tmeta .av{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--royal),color-mix(in srgb,var(--emerald) 70%,var(--ink) 30%));display:grid;place-items:center;font-weight:700;color:#fff;transition:transform .4s var(--ease-soft),box-shadow .4s var(--ease-soft)}
 .tmeta .av:hover{transform:scale(1.08);box-shadow:0 12px 30px -10px rgba(46,91,255,.55)}
 .tmeta .who b{display:block;font-weight:700}.tmeta .who span{color:var(--muted);font-size:14px}
-.tdots{margin-top:40px;display:flex;gap:10px}
+.tdots-row{margin-top:40px;display:flex;align-items:center;gap:16px}
+.tdots{display:flex;gap:10px}
 .tdots button{width:34px;height:3px;background:var(--line);border-radius:3px;transition:background .3s;position:relative}
 .tdots button::before{content:"";position:absolute;top:-20px;bottom:-20px;left:-6px;right:-6px}
 .tdots button.on{background:var(--gold)}
+.tnav{display:flex;gap:10px;margin-left:auto}
+.tnav button{width:40px;height:40px;border-radius:50%;border:1px solid var(--card-line);background:var(--glass);display:grid;place-items:center;transition:border-color .3s,background .3s}
+.tnav button:hover{border-color:color-mix(in srgb,var(--gold) 45%,var(--card-line));background:var(--glass-hi)}
+.tnav button svg{width:16px;height:16px;stroke:var(--fg);fill:none;stroke-width:2}
+.tcar{touch-action:pan-y}
 
 /* ===== Pricing ===== */
 .price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:56px}
@@ -405,6 +454,18 @@ footer{border-top:1px solid var(--line);padding:clamp(60px,7vw,90px) clamp(20px,
 .foot-col h4{font-family:var(--mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-text);margin-bottom:20px}
 .foot-col a{display:block;color:var(--muted);font-size:14.5px;padding:7px 0;transition:color .3s,padding-left .3s}
 .foot-col a:hover{color:var(--fg);padding-left:6px}
+/* Mobile: each foot-col is a native <details> so link groups collapse.
+   Desktop keeps them permanently open, static, with no disclosure affordance. */
+.foot-col summary{list-style:none}
+.foot-col summary::-webkit-details-marker{display:none}
+@media(min-width:681px){.foot-col summary{pointer-events:none}}
+@media(max-width:680px){
+  .foot-col h4{margin-bottom:0;padding:16px 0;border-top:1px solid var(--line);cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+  .foot-col summary::after{content:"+";font-family:var(--mono);color:var(--gold-text);font-size:16px}
+  .foot-col[open] summary::after{content:"–"}
+  .foot-col a{padding:9px 0 9px 2px}
+  .foot-col a:first-of-type{margin-top:4px}
+}
 .foot-bottom{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;margin-top:60px;padding-top:28px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
 .foot-bottom select{background:var(--glass);border:1px solid var(--line);color:var(--muted);padding:8px 14px;border-radius:10px;font-family:var(--mono);font-size:12px}
 
@@ -581,34 +642,58 @@ footer{border-top:1px solid var(--line);padding:clamp(60px,7vw,90px) clamp(20px,
     <span class="eyebrow reveal">What we run</span>
     <h2 class="section-title reveal" id="services-heading">Finance operations, handled with <em>precision</em>.</h2>
     <p class="lede reveal">From daily bookkeeping to CFO-ready reporting. Take a single layer or hand us the stack — the professionals, the software and the controls come as one coordinated engagement.</p>
-    <div class="svc-grid">
+    <div class="svc-grid" id="svc-grid">
       <article class="card c-lg reveal" data-tilt><div class="glow"></div>
         <div class="idx">01</div><h3>Bookkeeping &amp; Finance Operations</h3>
-        <p>Accurate day-to-day transaction recording, bank and credit card reconciliation, month-end closing, and periodic financial statements — profit &amp; loss, balance sheet and cash flow summaries.</p>
-        <div class="tags"><b>Bank Reconciliation</b><b>AP / AR</b><b>Month-End Close</b><b>Financial Statements</b></div>
+        <p class="summary">Accurate day-to-day recording, reconciliation and month-end closing.</p>
+        <button type="button" class="more-toggle" aria-expanded="false">Details<span class="chev" aria-hidden="true"></span></button>
+        <div class="more"><div class="more-inner">
+          <p>Accurate day-to-day transaction recording, bank and credit card reconciliation, month-end closing, and periodic financial statements — profit &amp; loss, balance sheet and cash flow summaries.</p>
+          <div class="tags"><b>Bank Reconciliation</b><b>AP / AR</b><b>Month-End Close</b><b>Financial Statements</b></div>
+        </div></div>
       </article>
       <article class="card c-md reveal" data-tilt><div class="glow"></div>
         <div class="idx">02</div><h3>Payroll Administration</h3>
-        <p>Payroll calculations, employee payment records, deductions, and payroll-related reporting based on your jurisdiction and payroll system.</p>
-        <div class="tags"><b>Payroll Processing</b><b>Compliance Reporting</b></div>
+        <p class="summary">Payroll calculations, payments and compliance reporting.</p>
+        <button type="button" class="more-toggle" aria-expanded="false">Details<span class="chev" aria-hidden="true"></span></button>
+        <div class="more"><div class="more-inner">
+          <p>Payroll calculations, employee payment records, deductions, and payroll-related reporting based on your jurisdiction and payroll system.</p>
+          <div class="tags"><b>Payroll Processing</b><b>Compliance Reporting</b></div>
+        </div></div>
       </article>
       <article class="card c-sm reveal" data-tilt><div class="glow"></div>
         <div class="idx">03</div><h3>Tax Filing Support</h3>
-        <p>GST/HST and sales tax data organized and prepared for filing, subject to accountant or tax advisor review where required.</p>
+        <p class="summary">GST/HST and sales tax prep, reviewed by your advisor.</p>
+        <button type="button" class="more-toggle" aria-expanded="false">Details<span class="chev" aria-hidden="true"></span></button>
+        <div class="more"><div class="more-inner">
+          <p>GST/HST and sales tax data organized and prepared for filing, subject to accountant or tax advisor review where required.</p>
+        </div></div>
       </article>
       <article class="card c-sm reveal" data-tilt><div class="glow"></div>
         <div class="idx">04</div><h3>Cloud Accounting Setup</h3>
-        <p>Xero and QuickBooks Online setup and migration, chart of accounts, bank feeds and integrations.</p>
+        <p class="summary">Xero &amp; QuickBooks setup, migration and integrations.</p>
+        <button type="button" class="more-toggle" aria-expanded="false">Details<span class="chev" aria-hidden="true"></span></button>
+        <div class="more"><div class="more-inner">
+          <p>Xero and QuickBooks Online setup and migration, chart of accounts, bank feeds and integrations.</p>
+        </div></div>
       </article>
       <article class="card c-md reveal" data-tilt><div class="glow"></div>
         <div class="idx">05</div><h3>Financial Reporting &amp; Advisory</h3>
-        <p>CFO dashboards, cash flow forecasting, budget planning and financial health checks that give owners real visibility into the business.</p>
-        <div class="tags"><b>CFO Dashboards</b><b>Cash Flow Forecasting</b><b>Budget Planning</b></div>
+        <p class="summary">CFO dashboards, forecasting and budget planning.</p>
+        <button type="button" class="more-toggle" aria-expanded="false">Details<span class="chev" aria-hidden="true"></span></button>
+        <div class="more"><div class="more-inner">
+          <p>CFO dashboards, cash flow forecasting, budget planning and financial health checks that give owners real visibility into the business.</p>
+          <div class="tags"><b>CFO Dashboards</b><b>Cash Flow Forecasting</b><b>Budget Planning</b></div>
+        </div></div>
       </article>
       <article class="card c-lg reveal" data-tilt><div class="glow"></div>
         <div class="idx">06</div><h3>AI-Enabled Finance Automation</h3>
-        <p>Process automation, and payment processor reconciliation (Stripe, PayPal) — with artificial intelligence used as a business enablement tool, and a qualified professional accountable for every number that ships.</p>
-        <div class="tags"><b>Process Automation</b><b>Payment Reconciliation</b><b>Human-Reviewed AI</b></div>
+        <p class="summary">Process automation with human-reviewed AI.</p>
+        <button type="button" class="more-toggle" aria-expanded="false">Details<span class="chev" aria-hidden="true"></span></button>
+        <div class="more"><div class="more-inner">
+          <p>Process automation, and payment processor reconciliation (Stripe, PayPal) — with artificial intelligence used as a business enablement tool, and a qualified professional accountable for every number that ships.</p>
+          <div class="tags"><b>Process Automation</b><b>Payment Reconciliation</b><b>Human-Reviewed AI</b></div>
+        </div></div>
       </article>
     </div>
   </div>
@@ -720,12 +805,27 @@ footer{border-top:1px solid var(--line);padding:clamp(60px,7vw,90px) clamp(20px,
   <div class="wrap">
     <span class="eyebrow reveal">How we work</span>
     <h2 class="section-title reveal" id="process-heading">A disciplined process, from <em>discovery</em> to steady state.</h2>
-    <div class="proc">
-      <div class="step reveal"><div class="num">01</div><div><h3>Discovery</h3><p>We review your current books, software, transaction volume and reporting needs, then map the scope of the engagement against our service catalogue.</p><div class="when">Days 1–3</div></div></div>
-      <div class="step reveal"><div class="num">02</div><div><h3>Assessment</h3><p>A financial health check of your books, cash flow, receivables, payables and reporting structure — identifying cleanup needs and improvement areas before anything moves.</p><div class="when">Week 1</div></div></div>
-      <div class="step reveal"><div class="num">03</div><div><h3>Implementation</h3><p>Software setup or migration, chart of accounts configuration, bank feeds and documented handover — with controls defined before transactions start flowing.</p><div class="when">Week 2–3</div></div></div>
-      <div class="step reveal"><div class="num">04</div><div><h3>Optimization</h3><p>Your first TrueNorth-run month-end close, delivered on the committed calendar day, with a management report reviewed for accuracy before it reaches you.</p><div class="when">Week 4</div></div></div>
-      <div class="step reveal"><div class="num">05</div><div><h3>Continuous support</h3><p>Ongoing bookkeeping, reconciliation and reporting, with periodic reviews of processes, technology and governance practices as your business grows.</p><div class="when">Ongoing</div></div></div>
+    <div class="proc" id="proc-list">
+      <div class="step reveal" tabindex="0" role="button" aria-expanded="false">
+        <div class="head"><div class="num">01</div><div class="head-text"><h3>Discovery</h3><div class="when">Days 1–3</div></div><span class="chev" aria-hidden="true"></span></div>
+        <div class="body"><div class="body-inner"><p>We review your current books, software, transaction volume and reporting needs, then map the scope of the engagement against our service catalogue.</p></div></div>
+      </div>
+      <div class="step reveal" tabindex="0" role="button" aria-expanded="false">
+        <div class="head"><div class="num">02</div><div class="head-text"><h3>Assessment</h3><div class="when">Week 1</div></div><span class="chev" aria-hidden="true"></span></div>
+        <div class="body"><div class="body-inner"><p>A financial health check of your books, cash flow, receivables, payables and reporting structure — identifying cleanup needs and improvement areas before anything moves.</p></div></div>
+      </div>
+      <div class="step reveal" tabindex="0" role="button" aria-expanded="false">
+        <div class="head"><div class="num">03</div><div class="head-text"><h3>Implementation</h3><div class="when">Week 2–3</div></div><span class="chev" aria-hidden="true"></span></div>
+        <div class="body"><div class="body-inner"><p>Software setup or migration, chart of accounts configuration, bank feeds and documented handover — with controls defined before transactions start flowing.</p></div></div>
+      </div>
+      <div class="step reveal" tabindex="0" role="button" aria-expanded="false">
+        <div class="head"><div class="num">04</div><div class="head-text"><h3>Optimization</h3><div class="when">Week 4</div></div><span class="chev" aria-hidden="true"></span></div>
+        <div class="body"><div class="body-inner"><p>Your first TrueNorth-run month-end close, delivered on the committed calendar day, with a management report reviewed for accuracy before it reaches you.</p></div></div>
+      </div>
+      <div class="step reveal" tabindex="0" role="button" aria-expanded="false">
+        <div class="head"><div class="num">05</div><div class="head-text"><h3>Continuous support</h3><div class="when">Ongoing</div></div><span class="chev" aria-hidden="true"></span></div>
+        <div class="body"><div class="body-inner"><p>Ongoing bookkeeping, reconciliation and reporting, with periodic reviews of processes, technology and governance practices as your business grows.</p></div></div>
+      </div>
     </div>
   </div>
 </section>
@@ -736,10 +836,10 @@ footer{border-top:1px solid var(--line);padding:clamp(60px,7vw,90px) clamp(20px,
     <span class="eyebrow reveal">Why TrueNorth</span>
     <h2 class="section-title reveal" id="why-heading">Governance you can hand to a <em>stakeholder</em>.</h2>
     <div class="why-grid">
-      <div class="why reveal"><div class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/></svg></div><h3>Governance-first delivery</h3><p>Every engagement operates within a documented governance framework — accountability, risk governance, and separation of corporate and personal interests are not optional.</p></div>
-      <div class="why reveal"><div class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg></div><h3>Technology &amp; AI, responsibly applied</h3><p>We continuously evaluate technologies that improve efficiency and accuracy — with human oversight required for any AI-assisted output that materially affects a client.</p></div>
-      <div class="why reveal"><div class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg></div><h3>Confidentiality by design</h3><p>Confidential information is protected using commercially reasonable safeguards, backed by an information security, privacy and AI governance framework reviewed periodically by the Board.</p></div>
-      <div class="why reveal"><div class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 12l3 3 5-6"/></svg></div><h3>Long-term partnerships</h3><p>We prioritize long-term client relationships through responsiveness, service quality, transparent communication and continuous improvement — not one-time transactional work.</p></div>
+      <div class="why reveal" tabindex="0" role="button" aria-expanded="false"><div class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/></svg></div><h3>Governance-first delivery</h3><p>Accountability and risk governance are never optional.</p><div class="full"><div class="full-inner"><p>Every engagement operates within a documented governance framework — accountability, risk governance, and separation of corporate and personal interests are not optional.</p></div></div><button type="button" class="toggle" aria-hidden="true" tabindex="-1">Read more<span class="chev" aria-hidden="true"></span></button></div>
+      <div class="why reveal" tabindex="0" role="button" aria-expanded="false"><div class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg></div><h3>Technology &amp; AI, responsibly applied</h3><p>Efficiency gains, always with human oversight.</p><div class="full"><div class="full-inner"><p>We continuously evaluate technologies that improve efficiency and accuracy — with human oversight required for any AI-assisted output that materially affects a client.</p></div></div><button type="button" class="toggle" aria-hidden="true" tabindex="-1">Read more<span class="chev" aria-hidden="true"></span></button></div>
+      <div class="why reveal" tabindex="0" role="button" aria-expanded="false"><div class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg></div><h3>Confidentiality by design</h3><p>Protected by a Board-reviewed security framework.</p><div class="full"><div class="full-inner"><p>Confidential information is protected using commercially reasonable safeguards, backed by an information security, privacy and AI governance framework reviewed periodically by the Board.</p></div></div><button type="button" class="toggle" aria-hidden="true" tabindex="-1">Read more<span class="chev" aria-hidden="true"></span></button></div>
+      <div class="why reveal" tabindex="0" role="button" aria-expanded="false"><div class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 12l3 3 5-6"/></svg></div><h3>Long-term partnerships</h3><p>Built on responsiveness and continuous improvement.</p><div class="full"><div class="full-inner"><p>We prioritize long-term client relationships through responsiveness, service quality, transparent communication and continuous improvement — not one-time transactional work.</p></div></div><button type="button" class="toggle" aria-hidden="true" tabindex="-1">Read more<span class="chev" aria-hidden="true"></span></button></div>
     </div>
   </div>
 </section>
@@ -763,7 +863,13 @@ footer{border-top:1px solid var(--line);padding:clamp(60px,7vw,90px) clamp(20px,
         <div class="tmeta"><div class="av" aria-hidden="true">27</div><div class="who"><b>AI Governance Principles</b><span>Article 27.12, Corporate Governance Charter</span></div></div>
       </div>
     </div>
-    <div class="tdots" id="tdots"></div>
+    <div class="tdots-row">
+      <div class="tdots" id="tdots"></div>
+      <div class="tnav">
+        <button type="button" id="tprev" aria-label="Previous testimonial"><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button>
+        <button type="button" id="tnext" aria-label="Next testimonial"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -861,9 +967,9 @@ footer{border-top:1px solid var(--line);padding:clamp(60px,7vw,90px) clamp(20px,
         <div class="brand">TRUENORTH<span class="deg">°</span></div>
         <p>Dependable financial stewardship, responsible technology, and long-term partnership — for businesses across Canada, the US, the UK and Australia.</p>
       </div>
-      <div class="foot-col"><h4>Services</h4><a href="#services">Bookkeeping</a><a href="#services">Payroll</a><a href="#services">Financial Reporting</a><a href="#services">Cloud Accounting</a><a href="#services">AI-Enabled Automation</a></div>
-      <div class="foot-col"><h4>Company</h4><a href="#about">About Us</a><a href="#values">Core Values</a><a href="#why">Why TrueNorth</a><a href="#pricing">Pricing</a><a href="#contact">Contact</a></div>
-      <div class="foot-col"><h4>Trust</h4><a href="#">Governance Charter</a><a href="#">Compliance</a><a href="#">Privacy Policy</a><a href="#">Terms</a><a href="https://www.linkedin.com/">LinkedIn</a></div>
+      <details class="foot-col" open><summary><h4>Services</h4></summary><a href="#services">Bookkeeping</a><a href="#services">Payroll</a><a href="#services">Financial Reporting</a><a href="#services">Cloud Accounting</a><a href="#services">AI-Enabled Automation</a></details>
+      <details class="foot-col" open><summary><h4>Company</h4></summary><a href="#about">About Us</a><a href="#values">Core Values</a><a href="#why">Why TrueNorth</a><a href="#pricing">Pricing</a><a href="#contact">Contact</a></details>
+      <details class="foot-col" open><summary><h4>Trust</h4></summary><a href="#">Governance Charter</a><a href="#">Compliance</a><a href="#">Privacy Policy</a><a href="#">Terms</a><a href="https://www.linkedin.com/">LinkedIn</a></details>
     </div>
     <div class="foot-bottom">
       <span>© 2026 TrueNorth Financial Services — 17325053 Canada Inc.</span>
@@ -1049,11 +1155,6 @@ function heroIn(){
   });
   // counters on view
   ScrollTrigger.batch('[data-count]',{start:'top 90%',onEnter:els=>els.forEach(animateCount)});
-  // process active state
-  document.querySelectorAll('.step').forEach(s=>{
-    ScrollTrigger.create({trigger:s,start:'top 60%',end:'bottom 40%',
-      onToggle:self=>s.classList.toggle('active',self.isActive)});
-  });
 })();
 function runCounters(){ document.querySelectorAll('#hero [data-count]').forEach(animateCount); }
 function animateCount(el){
@@ -1123,11 +1224,27 @@ function animateCount(el){
   // WCAG 2.2.2: auto-advancing content must be pausable, and shouldn't
   // run at all for people who've asked for reduced motion.
   function restart(){ stop(); if(reduced) return; timer=setInterval(()=>go(i+1),5500); }
+  const prevBtn=document.getElementById('tprev'), nextBtn=document.getElementById('tnext');
+  if(prevBtn) prevBtn.addEventListener('click',()=>go(i-1,true));
+  if(nextBtn) nextBtn.addEventListener('click',()=>go(i+1,true));
   if(tcar){
     tcar.addEventListener('mouseenter',stop);
     tcar.addEventListener('mouseleave',restart);
     tcar.addEventListener('focusin',stop);
     tcar.addEventListener('focusout',restart);
+    // Swipe support (mobile)
+    let sx=0, sy=0, tracking=false;
+    tcar.addEventListener('touchstart',e=>{ sx=e.touches[0].clientX; sy=e.touches[0].clientY; tracking=true; stop(); },{passive:true});
+    tcar.addEventListener('touchmove',e=>{
+      if(!tracking) return;
+      const dx=e.touches[0].clientX-sx, dy=e.touches[0].clientY-sy;
+      if(Math.abs(dx)>Math.abs(dy)) e.preventDefault(); // horizontal swipe: don't let the page scroll
+    },{passive:false});
+    tcar.addEventListener('touchend',e=>{
+      if(!tracking) return; tracking=false;
+      const dx=e.changedTouches[0].clientX-sx, dy=e.changedTouches[0].clientY-sy;
+      if(Math.abs(dx)>40 && Math.abs(dx)>Math.abs(dy)) go(i+(dx<0?1:-1),true); else restart();
+    });
   }
   restart();
 })();
@@ -1145,6 +1262,48 @@ window.addEventListener('resize', debounce(()=>{
   const openItem=qaItems.find(o=>o.qa.classList.contains('open'));
   if(openItem) openItem.ans.style.maxHeight=openItem.ans.scrollHeight+'px';
 }, 150));
+
+/* ========== GENERIC ONE-OPEN-AT-A-TIME ACCORDION ==========
+   Used by Services cards, Why-Choose-Us cards and Process steps: click
+   (or Enter/Space) toggles one panel open, closing any sibling that was
+   open, and keeps the panel height in sync with its content and viewport. */
+function makeAccordion(containerSelector, itemSelector, panelSelector, triggerSelector){
+  const container=document.querySelector(containerSelector);
+  if(!container) return null;
+  const items=[...container.querySelectorAll(itemSelector)].map(el=>({
+    el, panel: el.querySelector(panelSelector), trigger: triggerSelector?el.querySelector(triggerSelector):el
+  }));
+  function setOpen(item,open){
+    item.el.classList.toggle('open',open);
+    if(item.trigger && item.trigger.hasAttribute('aria-expanded')) item.trigger.setAttribute('aria-expanded',String(open));
+    if(item.el.hasAttribute('aria-expanded')) item.el.setAttribute('aria-expanded',String(open));
+    item.panel.style.maxHeight = open ? item.panel.scrollHeight+'px' : 0;
+  }
+  function toggle(item){
+    const willOpen=!item.el.classList.contains('open');
+    items.forEach(o=>{ if(o!==item) setOpen(o,false); });
+    setOpen(item,willOpen);
+  }
+  items.forEach(item=>{
+    (item.trigger||item.el).addEventListener('click', e=>{
+      // On service cards the whole card is clickable; avoid double-firing
+      // when the click landed on the dedicated toggle button inside it.
+      toggle(item);
+    });
+    item.el.addEventListener('keydown', e=>{
+      if(e.target!==item.el) return; // let native buttons/links handle their own keys
+      if(e.key==='Enter' || e.key===' '){ e.preventDefault(); toggle(item); }
+    });
+  });
+  window.addEventListener('resize', debounce(()=>{
+    const openItem=items.find(o=>o.el.classList.contains('open'));
+    if(openItem) openItem.panel.style.maxHeight=openItem.panel.scrollHeight+'px';
+  },150));
+  return items;
+}
+makeAccordion('#svc-grid','.card','.more','.more-toggle');
+makeAccordion('#why .why-grid','.why','.full');
+makeAccordion('#proc-list','.step','.body');
 
 /* ========== FORM ========== */
 (function(){
@@ -1323,6 +1482,9 @@ function updateSceneTheme(light){
     requestAnimationFrame(render);
   })();
 })();
+</script>
+</body>
+</html>
 </script>
 </body>
 </html>
