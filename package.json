@@ -4,7 +4,7 @@
   "private": true,
   "description": "TrueNorth Financial Services website, with a Resend-powered contact form API route.",
   "engines": {
-    "node": ">=22.x"
+    "node": ">=20.x"
   },
   "dependencies": {
     "resend": "^6.18.0"
