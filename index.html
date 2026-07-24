@@ -9,21 +9,27 @@
 <meta name="theme-color" content="#070C1B">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://truenorthfinancial.ca/">
-<!-- PLACEHOLDER: replace with a real favicon before launch -->
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23070C1B'/%3E%3Ctext x='50' y='68' font-size='58' text-anchor='middle' fill='%23C6A15B' font-family='Georgia,serif'%3ET%3C/text%3E%3C/svg%3E">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
 
 <!-- Open Graph -->
 <meta property="og:type" content="website">
 <meta property="og:title" content="TrueNorth Financial Services — Finance Operations, Engineered for Accuracy">
 <meta property="og:description" content="Technology-enabled bookkeeping and finance operations, governed by a formal corporate charter and delivered with disciplined, AI-assisted, human-reviewed processes.">
 <meta property="og:url" content="https://truenorthfinancial.ca/">
-<!-- PLACEHOLDER: add a real 1200x630 og:image before launch, e.g. -->
-<!-- <meta property="og:image" content="https://truenorthfinancial.ca/og-image.jpg"> -->
+<meta property="og:image" content="https://truenorthfinancial.ca/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="TrueNorth Financial Services — Finance Operations, Engineered for Accuracy">
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="TrueNorth Financial Services — Finance Operations, Engineered for Accuracy">
 <meta name="twitter:description" content="Technology-enabled bookkeeping and finance operations, governed by a formal corporate charter and delivered with disciplined, AI-assisted, human-reviewed processes.">
+<meta name="twitter:image" content="https://truenorthfinancial.ca/og-image.jpg">
 
 <!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -412,6 +418,19 @@ footer{border-top:1px solid var(--line);padding:clamp(60px,7vw,90px) clamp(20px,
   .form input,.form select{font-size:16px}
   .foot-bottom select{font-size:16px}
 }
+@media(max-width:480px){
+  /* Small phones (iPhone SE/mini, compact Android): tighten spacing and make the
+     primary CTAs full-width so they're easy to tap with a thumb, and stop the
+     4-stat hero-trust row and footer columns from feeling cramped at this width. */
+  .hero-cta{flex-direction:column;align-items:stretch;gap:12px}
+  .hero-cta .mag{width:100%;justify-content:center;text-align:center}
+  .hero-trust{gap:24px 32px}
+  .stats{grid-template-columns:1fr 1fr;gap:1px}
+  .foot-grid{grid-template-columns:1fr}
+  .foot-bottom{flex-direction:column;align-items:flex-start;gap:14px}
+  .calc-inputs,.calc-out{padding:24px}
+  .themebtn{width:44px;height:44px}
+}
 @media (prefers-reduced-motion:reduce){
   *{animation-duration:.001ms!important;transition-duration:.15s!important}
   .reveal{opacity:1;transform:none;filter:none}
@@ -791,7 +810,7 @@ footer{border-top:1px solid var(--line);padding:clamp(60px,7vw,90px) clamp(20px,
         <h2 class="reveal" style="margin-top:22px" id="contact-heading">Book a discovery <em>call.</em></h2>
         <p class="lede reveal" style="margin-top:20px">Tell us where your books stand today. You'll leave the call with a clear picture of scope, timeline and whether we're the right fit — no pitch deck required.</p>
         <div class="contact-detail reveal">
-          <div class="cd"><div class="ic">EMAIL</div><div class="t"><b><a href="mailto:manpreetmangat942@gmail.com">manpreetmangat942@gmail.com</a></b><span>We aim to respond within one business day</span></div></div>
+          <div class="cd"><div class="ic">EMAIL</div><div class="t"><b><a href="mailto:jewelnme.001@gmail.com">jewelnme.001@gmail.com</a></b><span>We aim to respond within one business day</span></div></div>
           <div class="cd"><div class="ic">MARKETS</div><div class="t"><b>Canada · United States · United Kingdom · Australia</b><span>English-language client communication</span></div></div>
           <div class="cd"><div class="ic">ENTITY</div><div class="t"><b>17325053 Canada Inc.</b><span>Operating as TrueNorth Financial Services</span></div></div>
         </div>
@@ -1152,7 +1171,7 @@ window.addEventListener('resize', debounce(()=>{
         form.querySelectorAll('.grp,.row2,#submitBtn').forEach(el=>el.style.display='none');
         document.getElementById('formok').style.display='block';
       } else {
-        formErr.textContent=payload.message || 'We could not send your request. Please try again, or email us directly at manpreetmangat942@gmail.com.';
+        formErr.textContent=payload.message || 'We could not send your request. Please try again, or email us directly at jewelnme.001@gmail.com.';
         formErr.classList.add('show');
         submitBtn.disabled=false;
         submitBtn.removeAttribute('aria-busy');

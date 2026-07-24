@@ -4,14 +4,24 @@
 
 const { Resend } = require('resend');
 
-const TO_EMAIL = 'jewelnme.001@gmail.com';
+const TO_EMAIL = 'jewelnme.001@gmail.com'; // Single source of truth for where leads land
 
-// Resend's shared sandbox sender. Works with zero setup, but can only
+// Resend's shared sandbox sender. Works with zero setup, but can ONLY
 // reliably deliver to the email address your Resend account was created
-// with. Once you verify your own domain in the Resend dashboard, set
-// RESEND_FROM_EMAIL (or edit the fallback below) to something like
-// "TrueNorth Financial <contact@yourdomain.com>".
+// with — every other recipient may silently fail or land in spam.
+//
+// ACTION REQUIRED BEFORE RELYING ON THIS FORM IN PRODUCTION:
+//   1. Verify a domain you own in the Resend dashboard (Domains > Add Domain).
+//   2. Set the RESEND_FROM_EMAIL environment variable in Vercel to something
+//      like "TrueNorth Financial <contact@truenorthfinancial.ca>".
+//   3. Redeploy. Until then, leads may not reliably reach TO_EMAIL below.
+const usingSandboxSender = !process.env.RESEND_FROM_EMAIL;
 const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'TrueNorth Financial <onboarding@resend.dev>';
+if (usingSandboxSender) {
+  console.warn('[contact] RESEND_FROM_EMAIL is not set — using the Resend sandbox sender, ' +
+    'which can silently fail to deliver to recipients outside your Resend account. ' +
+    'Verify a domain in Resend and set RESEND_FROM_EMAIL before relying on this in production.');
+}
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
