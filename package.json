@@ -1,0 +1,12 @@
+{
+  "name": "true-north-financial",
+  "version": "1.0.0",
+  "private": true,
+  "description": "TrueNorth Financial Services website, with a Resend-powered contact form API route.",
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "resend": "^6.18.0"
+  }
+}
