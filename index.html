@@ -6,6 +6,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>TrueNorth Financial Services — Finance Operations, Engineered for Accuracy</title>
 <meta name="description" content="TrueNorth Financial Services delivers accurate, dependable, technology-enabled bookkeeping and finance operations support for businesses across Canada, the United States, the United Kingdom and Australia — built on governance, confidentiality and operational excellence.">
+<meta name="theme-color" content="#070C1B" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#F4F6FB" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#070C1B">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://truenorthfinancial.ca/">
@@ -17,6 +19,8 @@
 
 <!-- Open Graph -->
 <meta property="og:type" content="website">
+<meta property="og:site_name" content="TrueNorth Financial Services">
+<meta property="og:locale" content="en_CA">
 <meta property="og:title" content="TrueNorth Financial Services — Finance Operations, Engineered for Accuracy">
 <meta property="og:description" content="Technology-enabled bookkeeping and finance operations, governed by a formal corporate charter and delivered with disciplined, AI-assisted, human-reviewed processes.">
 <meta property="og:url" content="https://truenorthfinancial.ca/">
@@ -43,7 +47,8 @@
      application script below can rely on GSAP and THREE already being defined. -->
 <link rel="preload" as="script" href="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js">
 <link rel="preload" as="script" href="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js">
-<link rel="preload" as="script" href="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js">
+<!-- three.js is intentionally NOT preloaded: it is fetched after first paint,
+     and only on devices that pass the capability gate (see bootScene). -->
 
 <!-- JSON-LD structured data -->
 <script type="application/ld+json">
@@ -53,9 +58,23 @@
   "name": "TrueNorth Financial Services",
   "legalName": "17325053 Canada Inc. (o/a TrueNorth Financial Services)",
   "description": "Technology-enabled bookkeeping and finance operations support, governed by a formal corporate governance charter.",
+  "url": "https://truenorthfinancial.ca/",
+  "image": "https://truenorthfinancial.ca/og-image.jpg",
+  "email": "jewelnme.001@gmail.com",
   "areaServed": ["CA","US","GB","AU"],
+  "availableLanguage": "en",
+  "currenciesAccepted": "CAD",
   "priceRange": "$$",
-  "serviceType": ["Bookkeeping","Bank Reconciliation","Accounts Payable","Accounts Receivable","Payroll Administration","Financial Reporting","Cloud Accounting","Cash Flow Forecasting","Financial System Automation","AI-Enabled Finance Solutions"]
+  "serviceType": ["Bookkeeping","Bank Reconciliation","Accounts Payable","Accounts Receivable","Payroll Administration","Financial Reporting","Cloud Accounting","Cash Flow Forecasting","Financial System Automation","AI-Enabled Finance Solutions"],
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Finance operations engagements",
+    "itemListElement": [
+      {"@type":"Offer","name":"Starter","description":"Up to 100 transactions / month","price":"399","priceCurrency":"CAD","priceSpecification":{"@type":"UnitPriceSpecification","price":"399","priceCurrency":"CAD","unitCode":"MON"}},
+      {"@type":"Offer","name":"Professional","description":"For growing SMEs","price":"999","priceCurrency":"CAD","priceSpecification":{"@type":"UnitPriceSpecification","price":"999","priceCurrency":"CAD","unitCode":"MON"}},
+      {"@type":"Offer","name":"Enterprise","description":"For multi-entity businesses — custom quote","priceCurrency":"CAD"}
+    ]
+  }
 }
 </script>
 
@@ -72,6 +91,21 @@
     {"@type":"Question","name":"Can you support businesses outside Canada?","acceptedAnswer":{"@type":"Answer","text":"Yes — our services are suited to businesses in Canada, the United States, the United Kingdom and Australia, with English-language client communication throughout."}}
   ]
 }
+</script>
+<script>
+/* Applied before first paint so a returning visitor never sees a flash of the
+   wrong theme. Storage is wrapped because private-mode Safari and sandboxed
+   iframes throw on access rather than returning null. */
+(function(){
+  var stored=null;
+  try{ stored=window.localStorage.getItem('tn-theme'); }catch(e){}
+  /* Dark is the brand's designed default, so an unknown visitor gets dark
+     regardless of their OS setting — following prefers-color-scheme here would
+     hand the light theme to most desktop visitors and change the first
+     impression of a deliberately dark-first brand. Only an explicit choice
+     made with the toggle is honoured. */
+  if(stored==='light') document.documentElement.setAttribute('data-theme','light');
+})();
 </script>
 <style>
 /* ============================================================
@@ -97,9 +131,12 @@
   --ease:cubic-bezier(.22,.61,.36,1); --ease-soft:cubic-bezier(.16,.8,.28,1);
   /* new: rhythm scale — replaces the old 180px-per-section padding */
   --pad-x:clamp(20px,5vw,64px);
-  --pad-y:clamp(72px,8vw,128px);
+  --pad-y:clamp(52px,6vw,96px);
   --nav-h:84px;
   --maxw:1320px;
+  /* native form controls + scrollbars must follow the theme, or the
+     <select> dropdown list renders light-on-light inside the dark UI */
+  color-scheme:dark;
 }
 :root[data-theme="light"]{
   --bg:#F4F6FB; --fg:#0A1024; --muted:#4A5876; --ink:#F4F6FB; --abyss:#E9EDF6;
@@ -108,17 +145,24 @@
   --card:rgba(255,255,255,.7); --card-line:rgba(20,40,80,.09); --card-hi:rgba(255,255,255,.9);
   --shadow:0 40px 100px -50px rgba(30,50,110,.35);
   --shadow-lift:0 26px 60px -24px rgba(30,50,110,.28), 0 8px 24px -12px rgba(46,91,255,.14);
+  color-scheme:light;
 }
 
 /* ===== Reset & base ===== */
 *,*::before,*::after{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;overflow-x:clip}
 html:focus-within{scroll-behavior:smooth}
 body{
   margin:0;background:var(--bg);color:var(--fg);font-family:var(--sans);
   font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;
-  overflow-x:hidden;transition:background .5s var(--ease-soft),color .5s var(--ease-soft);
+  overflow-x:clip;transition:background-color .22s var(--ease-soft),color .22s var(--ease-soft);
+  -webkit-tap-highlight-color:transparent;
+  text-rendering:optimizeLegibility;
 }
+a,button,label,summary,input[type=range]{touch-action:manipulation}
+/* better line breaks where supported — progressive, costs nothing elsewhere */
+.display,.section-title,.step h3,.svc-panel h3,.excerpt blockquote{text-wrap:balance}
+.lede,#hero .sub,.svc-panel .det,.row-item p,.step p,.ans p{text-wrap:pretty}
 img,svg,canvas{display:block;max-width:100%}
 button,input,select,textarea{font:inherit;color:inherit}
 a{color:inherit;text-decoration:none}
@@ -148,7 +192,7 @@ h3{font-size:clamp(16.5px,1.4vw,20px);font-weight:700;letter-spacing:-.01em;line
 .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
 
 /* ===== Layout primitives ===== */
-section{position:relative;padding:var(--pad-y) var(--pad-x)}
+section{position:relative;padding:var(--pad-y) var(--pad-x);scroll-margin-top:calc(var(--nav-h) + 24px)}
 .wrap{width:100%;max-width:var(--maxw);margin:0 auto;position:relative}
 .anchor{display:block;width:0;height:0;overflow:hidden;scroll-margin-top:calc(var(--nav-h) + 24px)}
 .sr-only{
@@ -164,12 +208,13 @@ section{position:relative;padding:var(--pad-y) var(--pad-x)}
 
 /* ===== Ambient depth + grain ===== */
 #ambient{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
-#ambient .blob{position:absolute;border-radius:50%;filter:blur(90px);opacity:.30}
+#ambient .blob{position:absolute;border-radius:50%;filter:blur(90px);opacity:.30;will-change:transform}
 #ambient .b1{width:44vw;height:44vw;left:-12vw;top:-8vw;background:radial-gradient(circle,var(--royal),transparent 68%);animation:drift1 26s var(--ease-soft) infinite alternate}
 #ambient .b2{width:38vw;height:38vw;right:-10vw;top:34vh;background:radial-gradient(circle,var(--gold),transparent 68%);animation:drift2 32s var(--ease-soft) infinite alternate}
 #ambient .b3{width:34vw;height:34vw;left:24vw;bottom:-14vw;background:radial-gradient(circle,var(--emerald),transparent 70%);animation:drift1 38s var(--ease-soft) infinite alternate-reverse}
-@keyframes drift1{to{transform:translate3d(6vw,4vh,0) scale(1.12)}}
-@keyframes drift2{to{transform:translate3d(-5vw,-5vh,0) scale(1.08)}}
+/* translate only — scaling a blurred layer re-rasterises the blur every frame */
+@keyframes drift1{to{transform:translate3d(6vw,4vh,0)}}
+@keyframes drift2{to{transform:translate3d(-5vw,-5vh,0)}}
 :root[data-theme="light"] #ambient .blob{opacity:.14}
 #grain{
   position:fixed;inset:0;z-index:3;pointer-events:none;opacity:.035;
@@ -178,7 +223,7 @@ section{position:relative;padding:var(--pad-y) var(--pad-x)}
 :root[data-theme="light"] #grain{opacity:.02}
 
 /* ===== Loader ===== */
-#loader{position:fixed;inset:0;z-index:1000;background:var(--abyss);display:grid;place-items:center;transition:opacity .8s var(--ease)}
+#loader{position:fixed;inset:0;z-index:1000;background:var(--abyss);display:grid;place-items:center;transition:opacity .42s var(--ease)}
 #loader .lk{font-family:var(--serif);font-size:clamp(28px,6vw,64px);letter-spacing:.02em;color:var(--pearl);position:relative}
 #loader .lk b{font-weight:400}
 #loader .lk .deg{color:var(--gold)}
@@ -196,7 +241,15 @@ section{position:relative;padding:var(--pad-y) var(--pad-x)}
   transform:translate(-50%,-50%);filter:blur(6px);opacity:0;transition:opacity .5s var(--ease)
 }
 .cursor-glow.on{opacity:1}
-@media (pointer:coarse){.cursor,.cursor-dot,.cursor-glow{display:none}}
+@media (pointer:coarse){
+  .cursor,.cursor-dot,.cursor-glow{display:none}
+  /* 44px minimum, per platform touch guidance */
+  .themebtn{width:44px;height:44px}
+  .burger{width:46px;height:46px}
+  .foot-col a{padding:10px 0}
+  .qa>button{padding-block:26px}
+  .navlinks a{padding:12px 15px}
+}
 
 /* ===== Navigation: floating glass, shrinks on scroll ===== */
 header.nav{
@@ -211,7 +264,7 @@ header.nav{
 header.nav.scrolled{
   height:66px;
   background:color-mix(in srgb,var(--bg) 72%,transparent);
-  backdrop-filter:blur(20px) saturate(150%);
+  -webkit-backdrop-filter:blur(20px) saturate(150%);backdrop-filter:blur(20px) saturate(150%);
   border-bottom-color:var(--line)
 }
 .brand{font-family:var(--serif);font-size:19px;letter-spacing:.06em;white-space:nowrap}
@@ -238,7 +291,9 @@ header.nav.scrolled{
 .themebtn:hover{background:var(--glass-hi);transform:rotate(18deg)}
 .themebtn svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round}
 /* scroll progress */
-.nav-prog{position:absolute;left:0;bottom:-1px;height:1.5px;width:0;background:linear-gradient(90deg,var(--gold),var(--royal));transition:width .1s linear}
+.nav-prog{position:absolute;left:0;bottom:-1px;height:1.5px;width:100%;
+  background:linear-gradient(90deg,var(--gold),var(--royal));
+  transform:scaleX(0);transform-origin:0 50%;will-change:transform}
 
 .burger{display:none;width:42px;height:42px;border-radius:12px;background:var(--glass);border:1px solid var(--card-line);cursor:pointer;padding:0;place-items:center}
 .burger span{display:block;width:17px;height:1.5px;background:var(--fg);margin:3px auto;transition:transform .35s var(--ease),opacity .25s}
@@ -247,8 +302,11 @@ header.nav.scrolled{
 .burger[aria-expanded="true"] span:nth-child(3){transform:translateY(-4.5px) rotate(-45deg)}
 .mobile-menu{
   position:fixed;inset:0;z-index:490;background:color-mix(in srgb,var(--abyss) 95%,transparent);
-  backdrop-filter:blur(24px);display:flex;flex-direction:column;justify-content:center;gap:6px;
-  padding:0 var(--pad-x);opacity:0;pointer-events:none;transition:opacity .4s var(--ease)
+  -webkit-backdrop-filter:blur(24px);backdrop-filter:blur(24px);display:flex;flex-direction:column;justify-content:center;gap:6px;
+  padding:0 calc(var(--pad-x) + env(safe-area-inset-left));
+  padding-bottom:env(safe-area-inset-bottom);
+  opacity:0;pointer-events:none;transition:opacity .4s var(--ease);
+  overscroll-behavior:contain
 }
 .mobile-menu.open{opacity:1;pointer-events:auto}
 .mobile-menu a{font-family:var(--serif);font-size:clamp(28px,8vw,46px);padding:8px 0;color:var(--fg)}
@@ -272,7 +330,7 @@ header.nav.scrolled{
 .mag .inner{position:relative;z-index:1;display:block}
 .mag.ghost{
   background:var(--glass);color:var(--fg);border:1px solid var(--card-line);
-  box-shadow:none;backdrop-filter:blur(var(--blur-glass))
+  box-shadow:none;-webkit-backdrop-filter:blur(var(--blur-glass));backdrop-filter:blur(var(--blur-glass))
 }
 .mag.ghost:hover{background:var(--glass-hi);box-shadow:var(--glow-gold)}
 .mag[disabled]{opacity:.6;cursor:not-allowed}
@@ -280,10 +338,10 @@ header.nav.scrolled{
 
 /* ===== HERO ===== */
 #hero{
-  min-height:100svh;display:flex;flex-direction:column;justify-content:center;
+  min-height:100vh;min-height:100svh;display:flex;flex-direction:column;justify-content:center;
   padding-top:calc(var(--nav-h) + 48px);padding-bottom:56px;overflow:hidden
 }
-#three{position:absolute;inset:0;width:100%;height:100%;z-index:0}
+#three{position:absolute;inset:0;width:100%;height:100%;z-index:0;opacity:0}
 .hero-veil{
   position:absolute;inset:0;z-index:1;pointer-events:none;
   background:
@@ -303,20 +361,24 @@ header.nav.scrolled{
 .hero-trust{
   display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;
   background:var(--card-line);border:1px solid var(--card-line);border-radius:20px;overflow:hidden;
-  backdrop-filter:blur(var(--blur-glass));box-shadow:var(--shadow)
+  -webkit-backdrop-filter:blur(var(--blur-glass));backdrop-filter:blur(var(--blur-glass));box-shadow:var(--shadow)
 }
-.trust-item{background:color-mix(in srgb,var(--bg) 62%,transparent);padding:20px 22px}
+/* 62% left this panel's legibility at the mercy of whatever the WebGL scene
+   drew behind it; 82% still reads as glass but is deterministic */
+.trust-item{background:color-mix(in srgb,var(--bg) 82%,transparent);padding:20px 22px}
 .trust-item .n{font-family:var(--serif);font-size:clamp(28px,3.1vw,42px);line-height:1;letter-spacing:-.02em}
 .trust-item .l{margin-top:8px;font-size:12px;line-height:1.45;color:var(--muted)}
-.scrollcue{position:absolute;left:50%;bottom:24px;transform:translateX(-50%);z-index:2;display:grid;justify-items:center;gap:9px}
+.scrollcue{position:absolute;left:50%;bottom:calc(24px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:2;display:grid;justify-items:center;gap:9px}
 .scrollcue span{font-family:var(--mono);font-size:9.5px;letter-spacing:.3em;color:var(--muted)}
 .scrollcue .track{width:1px;height:52px;background:linear-gradient(180deg,var(--gold),transparent);overflow:hidden}
 
 /* ===== Marquee band (platforms + industries) ===== */
 .band{
   position:relative;z-index:2;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
-  padding:22px 0;overflow:hidden;background:color-mix(in srgb,var(--bg) 55%,transparent);
-  backdrop-filter:blur(8px)
+  padding:15px 0;overflow:hidden;background:color-mix(in srgb,var(--bg) 88%,transparent);
+  /* no backdrop-filter here: this band is permanently animating, and blurring
+     a moving surface forces a full re-raster every frame on mobile GPUs */
+  contain:paint
 }
 .band + .band{border-top:0}
 .marquee{display:flex;overflow:hidden;
@@ -332,9 +394,11 @@ header.nav.scrolled{
 .marquee.rev .row span::before{background:var(--emerald)}
 @keyframes slide{to{transform:translateX(-50%)}}
 .band:hover .row{animation-play-state:paused}
+/* paused while scrolled past, or while the tab is in the background */
+.band.is-off .row{animation-play-state:paused}
 
 /* ===== SERVICES — vertical tabs ===== */
-.svc{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:clamp(28px,4vw,64px);margin-top:52px;align-items:start}
+.svc{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:clamp(28px,4vw,64px);margin-top:38px;align-items:start}
 .svc-nav{display:flex;flex-direction:column;gap:2px;position:sticky;top:calc(var(--nav-h) + 28px)}
 .svc-tab{
   display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:16px;
@@ -356,7 +420,7 @@ header.nav.scrolled{
 .svc-panel{
   position:relative;padding:clamp(26px,3.2vw,42px);border-radius:22px;
   background:linear-gradient(160deg,var(--card-hi),var(--card));
-  border:1px solid var(--card-line);backdrop-filter:blur(var(--blur-glass));box-shadow:var(--shadow);
+  border:1px solid var(--card-line);-webkit-backdrop-filter:blur(var(--blur-glass));backdrop-filter:blur(var(--blur-glass));box-shadow:var(--shadow);
   display:none
 }
 .svc-panel.on{display:block}
@@ -374,27 +438,31 @@ header.nav.scrolled{
 /* ===== GOVERNANCE — sticky left, scrolling ledger right ===== */
 .gov{display:grid;grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);gap:clamp(32px,5vw,80px);align-items:start}
 .gov-sticky{position:sticky;top:calc(var(--nav-h) + 40px)}
-.pillars{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:34px}
+.pillars{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:26px}
 .pillar{
-  padding:15px 16px;border-radius:14px;background:var(--card);border:1px solid var(--card-line);
-  backdrop-filter:blur(var(--blur-glass))
+  padding:13px 15px;border-radius:14px;background:var(--card);border:1px solid var(--card-line);
+  -webkit-backdrop-filter:blur(var(--blur-glass));backdrop-filter:blur(var(--blur-glass))
 }
 .pillar b{display:block;font-family:var(--serif);font-weight:400;font-size:16.5px;letter-spacing:-.01em}
 .pillar span{display:block;margin-top:6px;font-size:11.5px;line-height:1.45;color:var(--muted)}
 .gov-sticky .mag{margin-top:30px}
 
 .ledger-h{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-top:6px}
-.ledger-h .k{white-space:nowrap}
+/* nowrap is for the short mono label only. An <h3 class="k"> also matched
+   this, forcing a whole sentence onto one line and pushing the governance
+   column ~85px off-screen at 390px (~195px at 280px). */
+.ledger-h > .k{white-space:nowrap}
+.ledger-h h3.k,.ledger-h .k em{white-space:normal}
 .rows{border-top:1px solid var(--line);margin-top:18px}
 .row-item{
-  display:grid;grid-template-columns:auto 1fr;gap:18px;padding:20px 4px;
+  display:grid;grid-template-columns:auto 1fr;gap:18px;padding:15px 4px;
   border-bottom:1px solid var(--line)
 }
 .row-item .rn{font-family:var(--mono);font-size:11px;color:var(--gold-text);letter-spacing:.12em;padding-top:4px}
 .row-item h3{font-size:16px}
 .row-item p{margin-top:7px;color:var(--muted);font-size:14px;line-height:1.62}
 .vals{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 26px;border-top:1px solid var(--line);margin-top:18px}
-.val{padding:15px 0;border-bottom:1px solid var(--line)}
+.val{padding:11px 0;border-bottom:1px solid var(--line)}
 .val b{display:flex;align-items:center;gap:10px;font-size:14.5px;letter-spacing:-.005em}
 .val b i{font-family:var(--mono);font-style:normal;font-size:10.5px;color:var(--gold-text);letter-spacing:.1em}
 .val p{margin-top:6px;padding-left:29px;color:var(--muted);font-size:12.8px;line-height:1.55}
@@ -406,15 +474,15 @@ header.nav.scrolled{
 .ai-deco.r3{width:110px;height:110px;border:1px dashed color-mix(in srgb,var(--emerald) 32%,transparent);top:36%;left:-30px;animation:spinSlow 38s linear infinite}
 @keyframes spinSlow{to{transform:rotate(360deg)}}
 #method{overflow:hidden}
-.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.92fr);gap:clamp(30px,4.5vw,70px);align-items:center;position:relative;z-index:1;margin-top:44px}
-.duo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;margin-top:34px}
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.92fr);gap:clamp(30px,4.5vw,70px);align-items:center;position:relative;z-index:1;margin-top:32px}
+.duo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;margin-top:26px}
 .duo h3{font-size:15px}
 .duo p{margin-top:8px;color:var(--muted);font-size:13.6px;line-height:1.6}
 .duo>div{padding-top:16px;border-top:1px solid var(--line)}
 .charter{
   padding:clamp(26px,3.2vw,40px);border-radius:22px;border:1px solid var(--card-line);
   background:linear-gradient(160deg,rgba(46,91,255,.10),rgba(18,184,134,.06));
-  box-shadow:var(--shadow);backdrop-filter:blur(var(--blur-glass))
+  box-shadow:var(--shadow);-webkit-backdrop-filter:blur(var(--blur-glass));backdrop-filter:blur(var(--blur-glass))
 }
 .charter .q{font-family:var(--serif);font-size:clamp(19px,2.3vw,27px);line-height:1.32;margin:16px 0 24px;letter-spacing:-.012em}
 .rules{border-top:1px solid var(--card-line)}
@@ -424,14 +492,15 @@ header.nav.scrolled{
 .rules .r[data-state="no"] span:last-child{color:#E86A6A}
 
 /* horizontal pinned track */
-.htrack-outer{position:relative;margin-top:clamp(48px,6vw,84px)}
+.htrack-outer{position:relative;margin-top:clamp(34px,4vw,58px)}
 .htrack-head{display:flex;align-items:baseline;justify-content:space-between;gap:20px;flex-wrap:wrap}
-.htrack-viewport{overflow:hidden;margin-top:26px}
+.htrack-viewport{overflow:hidden;margin-top:26px;border-radius:20px}
+.htrack-viewport:focus-visible{outline:2px solid var(--gold);outline-offset:6px}
 .htrack{display:flex;gap:20px;will-change:transform}
 .step{
   flex:0 0 clamp(266px,25vw,352px);padding:clamp(24px,2.6vw,34px);border-radius:20px;
   background:linear-gradient(160deg,var(--card-hi),var(--card));border:1px solid var(--card-line);
-  backdrop-filter:blur(var(--blur-glass));display:flex;flex-direction:column
+  -webkit-backdrop-filter:blur(var(--blur-glass));backdrop-filter:blur(var(--blur-glass));display:flex;flex-direction:column
 }
 .step .num{font-family:var(--serif);font-size:40px;line-height:1;color:var(--gold-text);opacity:.3}
 .step .when{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:18px}
@@ -442,9 +511,9 @@ header.nav.scrolled{
 
 /* ===== THE MATH — calculator + pricing ===== */
 .calc-shell{
-  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));margin-top:44px;
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));margin-top:32px;
   border-radius:24px;overflow:hidden;border:1px solid var(--card-line);
-  background:var(--card);backdrop-filter:blur(var(--blur-glass));box-shadow:var(--shadow)
+  background:var(--card);-webkit-backdrop-filter:blur(var(--blur-glass));backdrop-filter:blur(var(--blur-glass));box-shadow:var(--shadow)
 }
 .calc-inputs{padding:clamp(26px,3.2vw,44px);border-right:1px solid var(--card-line)}
 .calc-out{padding:clamp(26px,3.2vw,44px);background:linear-gradient(160deg,rgba(46,91,255,.10),rgba(18,184,134,.06))}
@@ -453,19 +522,34 @@ header.nav.scrolled{
 .field label{display:flex;align-items:baseline;justify-content:space-between;gap:12px;font-size:13.4px;color:var(--muted);margin-bottom:12px}
 .field .v{font-family:var(--mono);font-size:14px;color:var(--fg);letter-spacing:.02em}
 input[type=range]{
-  -webkit-appearance:none;appearance:none;width:100%;height:2px;border-radius:2px;
-  background:linear-gradient(90deg,var(--gold),var(--line));outline:none;cursor:grab
+  -webkit-appearance:none;appearance:none;width:100%;height:26px;
+  background:transparent;cursor:grab;display:block;margin:0
+}
+/* the original build set outline:none here, which beat the global
+   :focus-visible rule and left the sliders with no keyboard affordance */
+input[type=range]:focus{outline:none}
+input[type=range]:focus-visible{outline:2px solid var(--gold);outline-offset:4px;border-radius:4px}
+input[type=range]:active{cursor:grabbing}
+/* WebKit / Blink */
+input[type=range]::-webkit-slider-runnable-track{
+  height:2px;border-radius:2px;background:linear-gradient(90deg,var(--gold),var(--line))
 }
 input[type=range]::-webkit-slider-thumb{
   -webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--fg);
   border:4px solid var(--bg);box-shadow:0 0 0 1px var(--gold),0 6px 18px -6px rgba(0,0,0,.7);
-  transition:transform .2s var(--ease)
+  margin-top:-9px;transition:transform .2s var(--ease)
 }
 input[type=range]:active::-webkit-slider-thumb{transform:scale(1.22)}
+input[type=range]:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 1px var(--gold),0 0 0 5px rgba(198,161,91,.35)}
+/* Gecko */
+input[type=range]::-moz-range-track{
+  height:2px;border-radius:2px;background:linear-gradient(90deg,var(--gold),var(--line))
+}
 input[type=range]::-moz-range-thumb{
-  width:14px;height:14px;border-radius:50%;background:var(--fg);
+  width:16px;height:16px;border-radius:50%;background:var(--fg);
   border:3px solid var(--bg);box-shadow:0 0 0 1px var(--gold)
 }
+input[type=range]:focus-visible::-moz-range-thumb{box-shadow:0 0 0 1px var(--gold),0 0 0 5px rgba(198,161,91,.35)}
 .savings{font-family:var(--serif);font-size:clamp(38px,5.4vw,68px);line-height:1;letter-spacing:-.03em;margin-top:14px;color:var(--emerald-text)}
 .calc-out .sub{margin-top:12px;font-size:13px;color:var(--muted);line-height:1.5}
 .calc-rows{margin-top:28px;border-top:1px solid var(--card-line)}
@@ -475,11 +559,11 @@ input[type=range]::-moz-range-thumb{
 .calc-rows .r.hi span:last-child{color:var(--emerald-text);font-weight:500}
 .calc-note{margin-top:16px;font-size:12px;color:var(--muted);max-width:70ch}
 
-.price-head{display:flex;align-items:baseline;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-top:clamp(52px,6vw,86px);padding-top:clamp(38px,4vw,56px);border-top:1px solid var(--line)}
-.price-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:32px}
+.price-head{display:flex;align-items:baseline;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-top:clamp(36px,4vw,60px);padding-top:clamp(28px,3vw,42px);border-top:1px solid var(--line)}
+.price-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:24px}
 .tier{
   position:relative;padding:clamp(24px,2.6vw,34px);border-radius:20px;
-  background:var(--card);border:1px solid var(--card-line);backdrop-filter:blur(var(--blur-glass));
+  background:var(--card);border:1px solid var(--card-line);-webkit-backdrop-filter:blur(var(--blur-glass));backdrop-filter:blur(var(--blur-glass));
   display:flex;flex-direction:column;
   transition:transform .5s var(--ease-soft),box-shadow .5s var(--ease-soft),border-color .5s
 }
@@ -499,12 +583,12 @@ input[type=range]::-moz-range-thumb{
 .tier .mag{width:100%}
 
 /* ===== FAQ + charter ===== */
-.faq-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,.85fr);gap:clamp(32px,5vw,72px);align-items:start;margin-top:46px}
+.faq-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,.85fr);gap:clamp(32px,5vw,72px);align-items:start;margin-top:34px}
 .faq{border-top:1px solid var(--line)}
 .qa{border-bottom:1px solid var(--line)}
 .qa>button{
   width:100%;display:flex;align-items:center;justify-content:space-between;gap:20px;
-  padding:24px 4px;background:none;border:0;cursor:pointer;text-align:left;
+  padding:19px 4px;background:none;border:0;cursor:pointer;text-align:left;
   font-size:clamp(15.5px,1.5vw,19px);font-weight:600;letter-spacing:-.01em;line-height:1.4;
   transition:color .3s var(--ease)
 }
@@ -526,7 +610,7 @@ input[type=range]::-moz-range-thumb{
   position:sticky;top:calc(var(--nav-h) + 40px);
   padding:clamp(24px,2.8vw,34px);border-radius:22px;border:1px solid var(--card-line);
   background:linear-gradient(165deg,var(--card-hi),var(--card));
-  backdrop-filter:blur(var(--blur-glass));box-shadow:var(--shadow)
+  -webkit-backdrop-filter:blur(var(--blur-glass));backdrop-filter:blur(var(--blur-glass));box-shadow:var(--shadow)
 }
 .charter-panel > p{margin-top:12px;font-size:12.8px;color:var(--muted);line-height:1.6}
 .excerpts{margin-top:26px;display:grid;gap:0}
@@ -537,15 +621,15 @@ input[type=range]::-moz-range-thumb{
 
 /* ===== CONTACT ===== */
 .contact-grid{display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);gap:clamp(32px,5vw,72px);align-items:start;margin-top:12px}
-.contact-detail{margin-top:38px;border-top:1px solid var(--line)}
-.cd{display:grid;grid-template-columns:88px 1fr;gap:18px;padding:19px 0;border-bottom:1px solid var(--line);align-items:start}
+.contact-detail{margin-top:28px;border-top:1px solid var(--line)}
+.cd{display:grid;grid-template-columns:88px 1fr;gap:18px;padding:15px 0;border-bottom:1px solid var(--line);align-items:start}
 .cd .ic{font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;color:var(--gold-text);padding-top:4px}
 .cd .t b{display:block;font-size:14.6px;font-weight:600;letter-spacing:-.005em}
 .cd .t b a:hover{color:var(--gold-text)}
 .cd .t span{display:block;margin-top:5px;font-size:12.4px;color:var(--muted)}
 
 .form{
-  background:linear-gradient(160deg,var(--card-hi),var(--card));backdrop-filter:blur(var(--blur-glass));
+  background:linear-gradient(160deg,var(--card-hi),var(--card));-webkit-backdrop-filter:blur(var(--blur-glass));backdrop-filter:blur(var(--blur-glass));
   border:1px solid var(--card-line);border-radius:24px;padding:clamp(26px,3.2vw,42px);box-shadow:var(--shadow);
   position:relative;overflow:hidden;
   background-image:radial-gradient(600px 200px at 50% 0%,rgba(198,161,91,.10),transparent 70%),
@@ -585,13 +669,22 @@ input[type=range]::-moz-range-thumb{
 .hp-field{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
 
 /* ===== Footer ===== */
-footer{border-top:1px solid var(--line);padding:clamp(56px,6vw,84px) var(--pad-x) 36px;position:relative;z-index:2}
+footer{border-top:1px solid var(--line);
+  padding:clamp(56px,6vw,84px) var(--pad-x) calc(36px + env(safe-area-inset-bottom));position:relative;z-index:2}
 .foot-grid{display:grid;grid-template-columns:minmax(0,1.5fr) repeat(3,minmax(0,1fr));gap:clamp(28px,4vw,56px)}
 .foot-brand .brand{font-size:22px}
 .foot-brand p{margin-top:16px;color:var(--muted);font-size:13.4px;line-height:1.65;max-width:38ch}
-.foot-col summary{list-style:none;cursor:pointer}
+.foot-col summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.foot-col summary::after{
+  content:'';width:7px;height:7px;flex:0 0 auto;margin-bottom:16px;
+  border-right:1.5px solid var(--muted);border-bottom:1.5px solid var(--muted);
+  transform:rotate(45deg);opacity:0;transition:transform .35s var(--ease),opacity .3s
+}
+.foot-col[open] summary::after{transform:rotate(-135deg)}
+@media (max-width:820px){ .foot-col summary::after{opacity:.8} }
 .foot-col summary::-webkit-details-marker{display:none}
-.foot-col h4{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-text);font-weight:500;margin:0 0 16px}
+.foot-col h3{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gold-text);font-weight:500;line-height:1.6;margin:0 0 16px}
 .foot-col a{display:block;padding:6px 0;color:var(--muted);font-size:13.4px;transition:color .3s var(--ease),transform .3s var(--ease)}
 .foot-col a:hover{color:var(--fg);transform:translateX(4px)}
 .foot-bottom{
@@ -599,13 +692,16 @@ footer{border-top:1px solid var(--line);padding:clamp(56px,6vw,84px) var(--pad-x
   display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;
   font-size:12.4px;color:var(--muted)
 }
-.foot-bottom select{background:var(--glass);border:1px solid var(--card-line);border-radius:8px;padding:7px 11px;font-size:12px;cursor:pointer}
+.foot-meta{display:flex;gap:10px;align-items:center;flex-wrap:wrap;
+  font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.foot-meta span:first-child{color:var(--fg)}
 
 /* ============================================================
    MOTION TIERS — replaces 78 identical reveals
    T1 statement · T2 support · T3 content · T4 ambient
    ============================================================ */
-[data-anim]{will-change:transform,opacity}
+/* No blanket will-change: promoting every reveal target up-front costs more
+   compositor memory than it saves. GSAP promotes each element as it tweens. */
 [data-anim="t1"]{opacity:0;clip-path:inset(0 0 102% 0);filter:blur(6px)}
 [data-anim="t2"]{opacity:0;transform:translateY(18px)}
 [data-anim="t3"]{opacity:0;transform:translateY(14px)}
@@ -615,25 +711,30 @@ footer{border-top:1px solid var(--line);padding:clamp(56px,6vw,84px) var(--pad-x
 @media (max-width:1080px){
   .hero-grid{grid-template-columns:1fr;align-items:start}
   .hero-trust{grid-template-columns:repeat(4,minmax(0,1fr));margin-top:40px}
-  .svc,.gov,.split,.faq-grid,.contact-grid{grid-template-columns:1fr}
+  .svc,.gov,.split,.faq-grid,.contact-grid{grid-template-columns:minmax(0,1fr)}
   .svc-nav,.gov-sticky,.charter-panel{position:static}
   .svc-nav{gap:6px}
   .price-grid{grid-template-columns:1fr}
   .foot-grid{grid-template-columns:1fr 1fr}
 }
 @media (max-width:820px){
-  :root{--pad-y:clamp(60px,11vw,88px);--nav-h:70px}
+  :root{--pad-y:clamp(44px,8vw,68px);--nav-h:70px}
   .navlinks{display:none}
   .book{display:none}
   .burger{display:grid}
   .hero-trust{grid-template-columns:repeat(2,minmax(0,1fr))}
   .calc-shell{grid-template-columns:1fr}
   .calc-inputs{border-right:0;border-bottom:1px solid var(--card-line)}
-  .duo,.pillars{grid-template-columns:1fr}
-  .vals{grid-template-columns:1fr}
+  .duo{grid-template-columns:1fr}
+  /* Two-up only where each column is actually readable. Pillars are a short
+     label plus one line, so they cope with ~165px; values carry a heading and
+     a two-to-three line description and need ~240px, which does not exist
+     until roughly 560px of viewport. Measured, not guessed. */
+  .pillars{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .vals{grid-template-columns:minmax(0,1fr)}
   .foot-grid{grid-template-columns:1fr}
   .foot-col{border-top:1px solid var(--line);padding-top:16px}
-  .foot-col summary h4{display:inline}
+  .foot-col summary h3{display:inline}
   /* horizontal track degrades to a native swipe rail */
   .htrack-viewport{overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;
     margin-inline:calc(-1 * var(--pad-x));padding-inline:var(--pad-x);scrollbar-width:none}
@@ -641,6 +742,45 @@ footer{border-top:1px solid var(--line);padding:clamp(56px,6vw,84px) var(--pad-x
   .htrack{transform:none!important}
   .step{scroll-snap-align:start;flex:0 0 78vw}
   .htrack-rail{display:none}
+}
+/* --- narrow phones and folded devices (280–360px) --- */
+@media (max-width:360px){
+  :root{--pad-x:16px}
+  .display{font-size:clamp(34px,9vw,44px)}
+  .section-title{font-size:clamp(27px,7.6vw,34px)}
+  .mag{padding:14px 22px;font-size:14px}
+  .hero-cta{gap:10px}
+  .hero-cta .mag{width:100%}
+  .step{flex:0 0 84vw}
+}
+/* --- landscape phones: a 100svh hero would push the CTA off-screen --- */
+@media (max-height:540px) and (orientation:landscape){
+  #hero{min-height:auto;padding-top:calc(var(--nav-h) + 26px);padding-bottom:40px}
+  .scrollcue{display:none}
+  .hero-trust{margin-top:26px}
+  .mobile-menu{justify-content:flex-start;padding-top:calc(var(--nav-h) + 16px);overflow-y:auto}
+  .mobile-menu a{font-size:clamp(20px,5vw,26px);padding:5px 0}
+}
+/* --- ultra-wide: stop the layout floating in a sea of gutter --- */
+@media (min-width:1800px){
+  :root{--maxw:1480px;--pad-y:clamp(72px,5vw,112px)}
+}
+/* --- cheaper motion where the GPU is smallest --- */
+@media (max-width:820px){
+  /* blurring large display type while it scrolls is the most expensive
+     reveal we have; the clip-path wipe alone reads the same */
+  [data-anim="t1"]{filter:none}
+  #ambient .blob{filter:blur(58px);opacity:.24}
+  #ambient .b3{display:none}
+  #grain{display:none}
+}
+@media (min-width:560px) and (max-width:820px){
+  /* from here each value column clears ~240px, so two-up reads properly */
+  .vals{grid-template-columns:repeat(2,minmax(0,1fr));gap:0 22px}
+}
+@media (max-width:400px){
+  /* pillars stop fitting two-up below this */
+  .pillars{grid-template-columns:minmax(0,1fr)}
 }
 @media (max-width:520px){
   .row2{grid-template-columns:1fr}
@@ -661,6 +801,13 @@ footer{border-top:1px solid var(--line);padding:clamp(56px,6vw,84px) var(--pad-x
   .htrack{transform:none!important}
   .htrack-viewport{overflow-x:auto}
 }
+
+/* Grid and flex children default to min-width:auto, which lets a single
+   unbreakable descendant push a whole column past the viewport. Prose
+   columns must always be allowed to shrink. */
+.gov > *,.svc > *,.split > *,.faq-grid > *,.contact-grid > *,
+.hero-grid > *,.price-grid > *,.duo > *,.vals > *,.pillars > *,.row-item > *{min-width:0}
+.row-item h3,.val b,.pillar b,.cd .t b{overflow-wrap:anywhere}
 
 /* lead line inside governance ledger rows (restored "why" summaries) */
 .row-item .lead{margin-top:7px;color:var(--fg);font-size:13.6px;line-height:1.55;opacity:.92}
@@ -912,6 +1059,25 @@ section::before{
   opacity:.5
 }
 #hero::before{display:none}
+/* ---- hero without the WebGL scene (low-power device, blocked CDN,
+        no-WebGL browser). A precision dot lattice: on-brand, static,
+        zero per-frame cost, and it reads as intent, not as absence. ---- */
+html.no-scene #three{display:none}
+html.no-scene #hero::after{
+  content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+  background-image:radial-gradient(rgba(139,162,201,.34) 1px,transparent 1.4px);
+  background-size:34px 34px;background-position:center;
+  -webkit-mask-image:radial-gradient(125% 85% at 20% 28%,#000 12%,transparent 72%);
+          mask-image:radial-gradient(125% 85% at 20% 28%,#000 12%,transparent 72%);
+  opacity:.7
+}
+html.no-scene .hero-veil{
+  background:
+    radial-gradient(120% 85% at 14% 22%,rgba(46,91,255,.16),transparent 62%),
+    radial-gradient(90% 70% at 88% 68%,rgba(198,161,91,.13),transparent 60%),
+    linear-gradient(180deg,transparent 46%,var(--bg) 99%)
+}
+html.no-scene[data-theme="light"] #hero::after{opacity:.45}
 /* depth veil that fades sections in/out as they enter (scrubbed by GSAP) */
 .sec-veil{
   position:absolute;inset:0;pointer-events:none;z-index:4;
@@ -929,6 +1095,9 @@ section::before{
   #ambient .rays{display:none}
 }
 @media (prefers-reduced-motion:reduce){
+  /* the cursor follower never receives its rAF loop in this mode, so it would
+     sit parked over the top-left corner forever — remove it entirely */
+  .cursor,.cursor-dot,.cursor-glow{display:none!important}
   [data-lux]::before,[data-lux]::after,.mag::before,
   .navlinks a::before,.navlinks a::after{display:none!important}
   [data-lux="tilt"]{transform:none!important}
@@ -936,6 +1105,69 @@ section::before{
   .ripple{display:none!important}
   .ok.show::before{animation:none!important;display:none}
   .sec-veil{display:none!important}
+}
+
+/* ============================================================
+   SAFETY NETS
+   The design leans on color-mix() and backdrop-filter. Both are
+   recent. Where they are missing the page must still be legible,
+   not transparent text over a 3D canvas.
+   ============================================================ */
+@supports not (color: color-mix(in srgb, red, blue)){
+  header.nav.scrolled{background:rgba(7,12,27,.94)}
+  .mobile-menu{background:rgba(4,7,15,.97)}
+  .trust-item{background:rgba(9,15,32,.82)}
+  .band{background:rgba(7,12,27,.94)}
+  .grp input::placeholder{color:#6E80A0}
+  .grp input:focus,.grp select:focus{box-shadow:0 0 0 3px rgba(198,161,91,.20)}
+  .tier:hover{border-color:rgba(198,161,91,.34)}
+  .tier.feat{border-color:rgba(46,91,255,.42)}
+  .ai-deco.r1{border-color:rgba(198,161,91,.42)}
+  .ai-deco.r2{border-color:rgba(92,123,255,.38)}
+  .ai-deco.r3{border-color:rgba(18,184,134,.32)}
+  :root[data-theme="light"] header.nav.scrolled{background:rgba(244,246,251,.94)}
+  :root[data-theme="light"] .mobile-menu{background:rgba(233,237,246,.97)}
+  :root[data-theme="light"] .trust-item{background:rgba(255,255,255,.86)}
+  :root[data-theme="light"] .band{background:rgba(244,246,251,.94)}
+  :root[data-theme="light"] .grp input::placeholder{color:#6A7893}
+}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  /* glass panels become opaque panels rather than washed-out ones */
+  header.nav.scrolled{background:rgba(7,12,27,.96)}
+  .mobile-menu{background:rgba(4,7,15,.98)}
+  .svc-panel,.step,.calc-shell,.charter,.charter-panel,.form,.tier,.pillar,.hero-trust{
+    background-color:rgba(12,18,37,.92)
+  }
+  .mag.ghost{background:rgba(255,255,255,.07)}
+  :root[data-theme="light"] header.nav.scrolled{background:rgba(244,246,251,.97)}
+  :root[data-theme="light"] .svc-panel,
+  :root[data-theme="light"] .step,
+  :root[data-theme="light"] .calc-shell,
+  :root[data-theme="light"] .charter,
+  :root[data-theme="light"] .charter-panel,
+  :root[data-theme="light"] .form,
+  :root[data-theme="light"] .tier,
+  :root[data-theme="light"] .pillar,
+  :root[data-theme="light"] .hero-trust{background-color:rgba(255,255,255,.94)}
+}
+
+/* ============================================================
+   PRINT — a client will print the pricing page. Make it usable.
+   ============================================================ */
+@media print{
+  #ambient,#grain,#loader,#three,.hero-veil,.cursor,.cursor-dot,.cursor-glow,
+  .sec-veil,.marquee,.scrollcue,.burger,.themebtn,.nav-prog,.ai-deco,
+  .mobile-menu,.lux-edge,.htrack-rail{display:none!important}
+  html,body{background:#fff!important;color:#000!important}
+  header.nav{position:static;height:auto;padding:12px 0;border-bottom:1px solid #ccc}
+  section{padding:20px 0!important;page-break-inside:avoid;min-height:0!important}
+  [data-anim]{opacity:1!important;transform:none!important;clip-path:none!important;filter:none!important}
+  .svc-panel[hidden]{display:block!important}
+  .ans{max-height:none!important}
+  .htrack{flex-wrap:wrap;transform:none!important}
+  .price-grid,.vals,.pillars,.duo{grid-template-columns:1fr 1fr!important}
+  a[href^="http"]::after{content:" (" attr(href) ")";font-size:10px;color:#555}
+  .step,.tier,.svc-panel,.form,.calc-shell{border:1px solid #bbb!important;box-shadow:none!important;background:#fff!important}
 }
 </style>
 </head>
@@ -1365,10 +1597,10 @@ section::before{
       </div>
       <form class="form" id="lead" novalidate data-lux="glow" data-anim="t3">
         <div class="grp hp-field" aria-hidden="true"><label for="f-hp">Leave this field empty</label><input id="f-hp" name="company_website" type="text" tabindex="-1" autocomplete="off"></div>
-        <div class="grp" data-lux="field"><label for="f-name">Full name</label><input id="f-name" type="text" required placeholder="Jane Okafor" autocomplete="name" aria-describedby="f-name-err"><span class="err" id="f-name-err" role="alert"></span></div>
+        <div class="grp" data-lux="field"><label for="f-name">Full name</label><input id="f-name" type="text" required placeholder="Jane Okafor" autocomplete="name" autocapitalize="words" spellcheck="false" maxlength="120" enterkeyhint="next" aria-describedby="f-name-err"><span class="err" id="f-name-err" role="alert"></span></div>
         <div class="row2">
-          <div class="grp" data-lux="field"><label for="f-email">Work email</label><input id="f-email" type="email" required placeholder="jane@company.com" autocomplete="email" aria-describedby="f-email-err"><span class="err" id="f-email-err" role="alert"></span></div>
-          <div class="grp" data-lux="field"><label for="f-company">Company</label><input id="f-company" type="text" placeholder="Company Ltd" autocomplete="organization"></div>
+          <div class="grp" data-lux="field"><label for="f-email">Work email</label><input id="f-email" type="email" required placeholder="jane@company.com" autocomplete="email" inputmode="email" autocapitalize="none" autocorrect="off" spellcheck="false" maxlength="180" enterkeyhint="next" aria-describedby="f-email-err"><span class="err" id="f-email-err" role="alert"></span></div>
+          <div class="grp" data-lux="field"><label for="f-company">Company</label><input id="f-company" type="text" placeholder="Company Ltd" autocomplete="organization" autocapitalize="words" maxlength="160" enterkeyhint="done"></div>
         </div>
         <div class="row2">
           <div class="grp" data-lux="field"><label for="f-country">Market</label>
@@ -1395,15 +1627,14 @@ section::before{
         <div class="brand">TRUENORTH<span class="deg">°</span></div>
         <p>Dependable financial stewardship, responsible technology, and long-term partnership — for businesses across Canada, the US, the UK and Australia.</p>
       </div>
-      <details class="foot-col" open><summary><h4>Services</h4></summary><a href="#services">Bookkeeping</a><a href="#services">Payroll</a><a href="#services">Financial Reporting</a><a href="#services">Cloud Accounting</a><a href="#services">AI-Enabled Automation</a></details>
-      <details class="foot-col" open><summary><h4>Company</h4></summary><a href="#about">About Us</a><a href="#values">Core Values</a><a href="#why">Why TrueNorth</a><a href="#pricing">Pricing</a><a href="#contact">Contact</a></details>
-      <details class="foot-col" open><summary><h4>Trust</h4></summary><a href="#governance">Governance Charter</a><a href="#governance">Compliance</a><a href="#">Privacy Policy</a><a href="#">Terms</a></details>
+      <details class="foot-col" open><summary><h3>Services</h3></summary><a href="#services">Bookkeeping</a><a href="#services">Payroll</a><a href="#services">Financial Reporting</a><a href="#services">Cloud Accounting</a><a href="#services">AI-Enabled Automation</a></details>
+      <details class="foot-col" open><summary><h3>Company</h3></summary><a href="#about">About Us</a><a href="#values">Core Values</a><a href="#why">Why TrueNorth</a><a href="#pricing">Pricing</a><a href="#contact">Contact</a></details>
+      <details class="foot-col" open><summary><h3>Trust</h3></summary><a href="#governance">Governance Charter</a><a href="#governance">Compliance</a><a href="#">Privacy Policy</a><a href="#">Terms</a></details>
     </div>
     <div class="foot-bottom">
       <span>© 2026 TrueNorth Financial Services — 17325053 Canada Inc.</span>
-      <div style="display:flex;gap:12px;align-items:center">
-        <select aria-label="Language"><option>English</option></select>
-        <select aria-label="Currency"><option>CAD $</option><option>USD $</option><option>GBP £</option><option>AUD $</option></select>
+      <div class="foot-meta">
+        <span>English</span><span aria-hidden="true">·</span><span>Prices quoted in CAD</span>
       </div>
     </div>
   </div>
@@ -1412,9 +1643,8 @@ section::before{
 <noscript><style>[data-anim]{opacity:1!important;transform:none!important;clip-path:none!important;filter:none!important}#loader{display:none}.svc-panel{display:block!important}.ans{max-height:none}</style></noscript>
 
 <!-- ============ LIBS ============ -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <script>
 // Safety net: if the CDN is blocked or times out, GSAP never becomes defined and
@@ -1446,17 +1676,37 @@ const $$ = (s,r=document)=>[...r.querySelectorAll(s)];
 (function(){
   const bar=$('#loader .bar'), pct=$('#loader .pct'), loader=$('#loader');
   if(!loader) return;
-  if(reduced){ loader.style.display='none'; heroIn(); return; }
-  let p=0; const iv=setInterval(()=>{
-    p+=Math.random()*16+6; if(p>=100){p=100;clearInterval(iv);done();}
-    bar.style.width=p+'%'; pct.textContent=String(Math.floor(p)).padStart(3,'0');
-  },110);
-  function done(){
-    setTimeout(()=>{
-      loader.style.opacity='0';
-      setTimeout(()=>{ loader.style.display='none'; heroIn(); },800);
-    },260);
+  let done=false;
+  function finish(){
+    if(done) return; done=true;
+    if(bar) bar.style.width='100%';
+    if(pct) pct.textContent='100';
+    loader.style.opacity='0';
+    loader.setAttribute('inert','');
+    setTimeout(()=>{ loader.style.display='none'; },420);
+    heroIn();
+    scheduleScene();   // hero has painted; now it is safe to spend on 3D
   }
+  if(reduced){ loader.style.display='none'; heroIn(); return; }
+
+  /* The old build ran a random timer to 100% — up to ~2.5s of the hero
+     sitting behind an opaque panel, which is exactly the wrong thing to
+     do to Largest Contentful Paint. This tracks real font readiness and
+     refuses to hold the page longer than CAP under any circumstances. */
+  const MIN=340, CAP=900, t0=performance.now();
+  let ready=false;
+  const fonts=(document.fonts && document.fonts.ready) ? document.fonts.ready : Promise.resolve();
+  fonts.then(()=>{ ready=true; }).catch(()=>{ ready=true; });
+  setTimeout(()=>{ ready=true; }, CAP);
+  const iv=setInterval(()=>{
+    const e=performance.now()-t0;
+    const p=Math.min(97,(e/CAP)*100);
+    if(bar) bar.style.width=p+'%';
+    if(pct) pct.textContent=String(Math.floor(p)).padStart(3,'0');
+    if(ready && e>=MIN){ clearInterval(iv); finish(); }
+  },60);
+  /* last-resort guard: nothing may keep the loader up past this */
+  setTimeout(()=>{ clearInterval(iv); finish(); }, CAP+400);
 })();
 
 /* ========== CUSTOM CURSOR ========== */
@@ -1470,12 +1720,21 @@ const $$ = (s,r=document)=>[...r.querySelectorAll(s)];
     if(!shown && g){ g.classList.add('on'); shown=true; }
   },{passive:true});
   window.addEventListener('mouseleave',()=>{ if(g){ g.classList.remove('on'); shown=false; } });
-  (function loop(){
-    if(document.hidden){ requestAnimationFrame(loop); return; }
+  /* parks itself once the ring has caught up with the pointer, and is
+     woken again by the next real move — an idle desktop tab costs 0 frames */
+  let ticking=false;
+  function loop(){
+    if(document.hidden){ ticking=false; return; }
     cx+=(tx-cx)*.18; cy+=(ty-cy)*.18; c.style.transform=`translate(${cx}px,${cy}px) translate(-50%,-50%)`;
     if(g){ gx+=(tx-gx)*.06; gy+=(ty-gy)*.06; g.style.transform=`translate(${gx}px,${gy}px) translate(-50%,-50%)`; }
+    const settled=Math.abs(tx-cx)<0.15 && Math.abs(ty-cy)<0.15 && Math.abs(tx-gx)<0.5 && Math.abs(ty-gy)<0.5;
+    if(settled){ ticking=false; return; }
     requestAnimationFrame(loop);
-  })();
+  }
+  function wake(){ if(!ticking){ ticking=true; requestAnimationFrame(loop); } }
+  window.addEventListener('mousemove',wake,{passive:true});
+  document.addEventListener('visibilitychange',()=>{ if(!document.hidden) wake(); });
+  wake();
   $$('[data-hot],a,button').forEach(el=>{
     el.addEventListener('mouseenter',()=>c.classList.add('hot'));
     el.addEventListener('mouseleave',()=>c.classList.remove('hot'));
@@ -1486,12 +1745,20 @@ const $$ = (s,r=document)=>[...r.querySelectorAll(s)];
 (function(){
   const nav=$('header.nav'), prog=$('.nav-prog'), pill=$('.nav-pill');
   const links=$$('.navlinks a');
-  const onScroll=()=>{
+  /* one rAF-batched write per frame instead of one style write per scroll
+     event, and a transform rather than a width so it never triggers layout */
+  let queued=false;
+  const paint=()=>{
+    queued=false;
     nav.classList.toggle('scrolled', window.scrollY>40);
     const max=document.documentElement.scrollHeight-window.innerHeight;
-    if(prog) prog.style.width=(max>0?(window.scrollY/max)*100:0)+'%';
+    const frac=max>0?Math.min(1,Math.max(0,window.scrollY/max)):0;
+    if(prog) prog.style.transform='scaleX('+frac.toFixed(4)+')';
   };
-  window.addEventListener('scroll',onScroll,{passive:true}); onScroll();
+  const onScroll=()=>{ if(!queued){ queued=true; requestAnimationFrame(paint); } };
+  window.addEventListener('scroll',onScroll,{passive:true});
+  window.addEventListener('resize',onScroll,{passive:true});
+  paint();
 
   /* active-section indicator */
   function movePill(el){
@@ -1507,8 +1774,9 @@ const $$ = (s,r=document)=>[...r.querySelectorAll(s)];
         if(!en.isIntersecting) return;
         const hit=targets.find(o=>o.sec===en.target);
         if(!hit) return;
-        links.forEach(l=>l.classList.remove('active'));
+        links.forEach(l=>{ l.classList.remove('active'); l.removeAttribute('aria-current'); });
         hit.a.classList.add('active');
+        hit.a.setAttribute('aria-current','true');
         movePill(hit.a);
       });
     },{rootMargin:'-45% 0px -50% 0px'});
@@ -1538,13 +1806,18 @@ const $$ = (s,r=document)=>[...r.querySelectorAll(s)];
 (function(){
   const ambient=$('#ambient');
   if(!ambient||reduced) return;
-  let ay=0;
-  (function loop(){
-    if(document.hidden){ requestAnimationFrame(loop); return; }
+  let ay=0, ticking=false;
+  function loop(){
+    if(document.hidden){ ticking=false; return; }
     const target=(window.scrollY||0)*0.06; ay+=(target-ay)*.08;
-    ambient.style.transform=`translate3d(0,${ay}px,0)`;
+    ambient.style.transform=`translate3d(0,${ay.toFixed(2)}px,0)`;
+    if(Math.abs(target-ay)<0.2){ ticking=false; return; }
     requestAnimationFrame(loop);
-  })();
+  }
+  function wake(){ if(!ticking){ ticking=true; requestAnimationFrame(loop); } }
+  window.addEventListener('scroll',wake,{passive:true});
+  document.addEventListener('visibilitychange',()=>{ if(!document.hidden) wake(); });
+  wake();
 })();
 
 /* ========== MAGNETIC BUTTONS ========== */
@@ -1562,17 +1835,34 @@ if(hasGSAP && !reduced) $$('.mag').forEach(btn=>{
 /* ========== THEME TOGGLE ========== */
 (function(){
   const btn=$('.themebtn'), root=document.documentElement;
-  const metaTheme=$('meta[name="theme-color"]');
+  const metaTheme=$('meta[name="theme-color"]:not([media])');
   const moon=$('.ico-moon'), sun=$('.ico-sun');
   if(!btn) return;
+
+  function paint(light, syncScene){
+    root.setAttribute('data-theme', light?'light':'dark');
+    btn.setAttribute('aria-label', light?'Switch to dark theme':'Switch to light theme');
+    btn.setAttribute('aria-pressed', String(light));
+    if(metaTheme) metaTheme.setAttribute('content', light?'#F4F6FB':'#070C1B');
+    if(moon&&sun){ moon.style.display=light?'none':'block'; sun.style.display=light?'block':'none'; }
+    /* `renderer` lives in a `let` declared later in this script, so calling into
+       the scene during initial synchronous evaluation would throw a temporal
+       dead zone error and abort every initialiser below this one. The scene
+       reads the current theme itself when it mounts, so the first paint skips
+       it entirely — and the guard stays defensive for good measure. */
+    if(syncScene){ try{ updateSceneTheme(light); }catch(e){} }
+  }
+
+  /* the pre-paint script in <head> already set the attribute; mirror that
+     state onto the button so the icon and label are never out of sync */
+  paint(root.getAttribute('data-theme')==='light', false);
+
   btn.addEventListener('click',()=>{
-    const wasLight = root.getAttribute('data-theme')==='light';
-    root.setAttribute('data-theme', wasLight?'dark':'light');
-    btn.setAttribute('aria-label', wasLight?'Switch to light theme':'Switch to dark theme');
-    if(metaTheme) metaTheme.setAttribute('content', wasLight?'#070C1B':'#F4F6FB');
-    if(moon&&sun){ moon.style.display=wasLight?'block':'none'; sun.style.display=wasLight?'none':'block'; }
-    updateSceneTheme(!wasLight);
+    const light = root.getAttribute('data-theme')!=='light';
+    paint(light, true);
+    try{ localStorage.setItem('tn-theme', light?'light':'dark'); }catch(e){}
   });
+
 })();
 
 /* ========== COUNTERS ========== */
@@ -1586,6 +1876,22 @@ function animateCount(el){
     el.textContent=pre+obj.v.toLocaleString('en-US',{minimumFractionDigits:dec,maximumFractionDigits:dec})+suf;
   }});
 }
+/* The animated figure starts life as "0", which is what assistive tech
+   reads. Hide the animating node and expose the true value beside it. */
+(function labelCounters(){
+  $$('[data-count]').forEach(el=>{
+    if(el.dataset.labelled) return;
+    el.dataset.labelled='1';
+    const end=parseFloat(el.dataset.count);
+    if(isNaN(end)) return;
+    const text=(el.dataset.prefix||'')+end.toLocaleString('en-US')+(el.dataset.suffix||'');
+    const sr=document.createElement('span');
+    sr.className='sr-only'; sr.textContent=text;
+    el.setAttribute('aria-hidden','true');
+    el.insertAdjacentElement('afterend',sr);
+  });
+})();
+
 function runCounters(){ $$('#hero [data-count]').forEach(animateCount); }
 
 /* ========== HERO INTRO ========== */
@@ -1708,6 +2014,23 @@ function initReveals(){
   row.appendChild(build()); row.appendChild(build());
 })();
 
+/* ========== MARQUEE VISIBILITY ==========
+   Two infinite translate animations behind the fold are pure waste on a
+   phone; park them whenever they are not actually on screen. */
+(function(){
+  const bands=$$('.band');
+  if(!bands.length) return;
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver(entries=>{
+      entries.forEach(en=>en.target.classList.toggle('is-off',!en.isIntersecting));
+    },{rootMargin:'120px 0px'});
+    bands.forEach(b=>io.observe(b));
+  }
+  document.addEventListener('visibilitychange',()=>{
+    bands.forEach(b=>b.classList.toggle('is-off',document.hidden));
+  });
+})();
+
 /* ========== SAVINGS CALCULATOR (math preserved verbatim) ========== */
 (function(){
   const g=id=>document.getElementById(id);
@@ -1719,6 +2042,11 @@ function initReveals(){
   function calc(){
     const staff=+els.staff.value, salary=+els.salary.value, tools=+els.tools.value, admin=+els.admin.value;
     out.vStaff.textContent=staff; out.vSalary.textContent=usd(salary); out.vTools.textContent=usd(tools); out.vAdmin.textContent=admin;
+    /* screen readers otherwise announce "78000"; give them "$78,000" */
+    els.staff.setAttribute('aria-valuetext',staff+(staff===1?' person':' people'));
+    els.salary.setAttribute('aria-valuetext',usd(salary)+' per person per year');
+    els.tools.setAttribute('aria-valuetext',usd(tools)+' per year');
+    els.admin.setAttribute('aria-valuetext',admin+(admin===1?' hour':' hours')+' per week');
     const current = staff*salary + tools;
     const meridian = current*0.45;                 // illustrative estimate for the self-service calculator
     const savings = current - meridian;
@@ -1749,10 +2077,15 @@ function initReveals(){
       if(!open){ qa.classList.add('open'); ans.style.maxHeight=ans.scrollHeight+'px'; btn.setAttribute('aria-expanded','true'); }
     });
   });
-  window.addEventListener('resize', debounce(()=>{
+  const recalc=()=>{
     const openItem=items.find(o=>o.qa.classList.contains('open'));
     if(openItem) openItem.ans.style.maxHeight=openItem.ans.scrollHeight+'px';
-  },150));
+  };
+  window.addEventListener('resize', debounce(recalc,150));
+  window.addEventListener('orientationchange', ()=>setTimeout(recalc,260));
+  /* the webfont swapping in reflows the answer taller than the max-height
+     that was measured against the fallback face, which clips the last line */
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(()=>setTimeout(recalc,60));
 })();
 
 /* ========== HORIZONTAL PINNED PROCESS TRACK ==========
@@ -1778,6 +2111,31 @@ function initReveals(){
   }
   build();
   window.addEventListener('resize', debounce(()=>{ build(); ScrollTrigger.refresh(); },200));
+})();
+
+/* ========== PROCESS RAIL: KEYBOARD ACCESS ==========
+   When the pinned desktop track degrades to a native swipe rail, it is a
+   scrollable region containing no focusable elements — which means keyboard
+   users could not reach stages 02-05. Expose it as a focusable group, but
+   only while it really is scrollable, so desktop gains no dead tab stop. */
+(function(){
+  const vp=$('.htrack-viewport');
+  if(!vp) return;
+  const mq=window.matchMedia('(max-width:820px)');
+  function sync(){
+    if(mq.matches || reduced){
+      vp.setAttribute('tabindex','0');
+      vp.setAttribute('role','group');
+      vp.setAttribute('aria-label','Our process, five stages — scroll sideways to see them all');
+    } else {
+      vp.removeAttribute('tabindex');
+      vp.removeAttribute('role');
+      vp.removeAttribute('aria-label');
+    }
+  }
+  sync();
+  if(mq.addEventListener) mq.addEventListener('change',sync);
+  else if(mq.addListener) mq.addListener(sync);
 })();
 
 /* ========== CONTACT FORM (POST contract unchanged) ========== */
@@ -1859,21 +2217,88 @@ function initReveals(){
   });
 })();
 
+/* ========== FOOTER COLUMNS: ACCORDION ON SMALL SCREENS ==========
+   All four columns expanded added roughly 600px of scroll on a phone for
+   links most visitors never use. They are already <details>, so collapsing
+   them below 820px keeps everything reachable and keyboard-accessible while
+   giving the phone layout a usable footer. Desktop stays fully expanded. */
+(function(){
+  const cols=$$('.foot-col');
+  if(!cols.length) return;
+  const mq=window.matchMedia('(max-width:820px)');
+  let programmatic=false, userDecided=false;
+  cols.forEach(c=>c.addEventListener('toggle',()=>{ if(!programmatic) userDecided=true; }));
+  function sync(){
+    if(userDecided) return;          // never fight a deliberate choice
+    programmatic=true;
+    cols.forEach(c=>{ c.open = !mq.matches; });
+    programmatic=false;
+  }
+  sync();
+  if(mq.addEventListener) mq.addEventListener('change',sync);
+  else if(mq.addListener) mq.addListener(sync);
+})();
+
 /* ========== MOBILE MENU ========== */
 (function(){
   const burger=$('.burger'), menu=$('#mobileMenu');
   if(!burger||!menu) return;
+  let lockY=0;
+  const focusables=()=>[...menu.querySelectorAll('a[href],button:not([disabled])')];
+
   function setOpen(open){
     burger.setAttribute('aria-expanded', String(open));
     burger.setAttribute('aria-label', open?'Close menu':'Open menu');
     menu.setAttribute('aria-hidden', String(!open));
     menu.toggleAttribute('inert', !open);
     menu.classList.toggle('open', open);
-    document.body.style.overflow = open ? 'hidden' : '';
+
+    /* body{overflow:hidden} alone does not hold iOS Safari, and it throws
+       away the scroll position. Pin the body instead and restore it. */
+    if(open){
+      lockY=window.scrollY||0;
+      document.body.style.position='fixed';
+      document.body.style.top=(-lockY)+'px';
+      document.body.style.left='0';
+      document.body.style.right='0';
+      document.body.style.width='100%';
+      const first=focusables()[0];
+      if(first) first.focus({preventScroll:true});
+    } else {
+      document.body.style.position='';
+      document.body.style.top='';
+      document.body.style.left='';
+      document.body.style.right='';
+      document.body.style.width='';
+      /* the page opts into smooth scrolling via html:focus-within, which would
+         make this restore visibly glide; the position must be restored, not
+         animated to, so force an instant jump where the option is supported */
+      try{ window.scrollTo({top:lockY,left:0,behavior:'instant'}); }
+      catch(e){ window.scrollTo(0,lockY); }
+    }
   }
-  burger.addEventListener('click',()=> setOpen(!menu.classList.contains('open')));
+  const isOpen=()=>menu.classList.contains('open');
+
+  burger.addEventListener('click',()=> setOpen(!isOpen()));
   menu.querySelectorAll('a').forEach(a=> a.addEventListener('click',()=> setOpen(false)));
-  document.addEventListener('keydown',e=>{ if(e.key==='Escape') setOpen(false); });
+
+  /* tapping the empty area of the sheet closes it */
+  menu.addEventListener('click',e=>{ if(e.target===menu) setOpen(false); });
+
+  document.addEventListener('keydown',e=>{
+    if(!isOpen()) return;
+    if(e.key==='Escape'){ setOpen(false); burger.focus(); return; }
+    if(e.key!=='Tab') return;
+    /* keep Tab inside the open sheet */
+    const f=focusables();
+    if(!f.length) return;
+    const first=f[0], last=f[f.length-1];
+    if(e.shiftKey && document.activeElement===first){ e.preventDefault(); last.focus(); }
+    else if(!e.shiftKey && document.activeElement===last){ e.preventDefault(); first.focus(); }
+  });
+
+  /* rotating to landscape while the sheet is open must not leave the body pinned */
+  window.addEventListener('orientationchange',()=>{ if(isOpen()) setOpen(false); });
 })();
 
 /* ============================================================
@@ -1923,8 +2348,14 @@ const LUX = (function(){
     px=e.clientX-rect.left; py=e.clientY-rect.top;
   }
 
+  let edgeDeg=0;
   function loop(){
     if(!active){ running=false; return; }
+    if(document.hidden){ running=false; return; }
+    if(active.dataset.lux==='tilt'){
+      edgeDeg=(edgeDeg+0.35)%360;
+      active.style.setProperty('--edge',edgeDeg+'deg');
+    }
     cx += (px-cx)*.16; cy += (py-cy)*.16;
     const w=rect.width||1, h=rect.height||1;
     const nx=cx/w, ny=cy/h;                    // 0..1
@@ -1948,17 +2379,14 @@ const LUX = (function(){
     el.addEventListener('pointermove',onMove,{passive:true});
   });
   window.addEventListener('resize', debounce(()=>{ if(active) measure(active); },150));
-  window.addEventListener('scroll', ()=>{ if(active) measure(active); },{passive:true});
-
-  /* slow rotation of the conic border sheen */
-  if(hasGSAP){
-    let deg=0;
-    (function spin(){
-      deg=(deg+0.35)%360;
-      if(active && active.dataset.lux==='tilt') active.style.setProperty('--edge',deg+'deg');
-      requestAnimationFrame(spin);
-    })();
-  }
+  /* getBoundingClientRect on every scroll event is a forced synchronous
+     layout; batch it to at most one per frame, and only while hovering */
+  let remeasure=false;
+  window.addEventListener('scroll',()=>{
+    if(!active || remeasure) return;
+    remeasure=true;
+    requestAnimationFrame(()=>{ remeasure=false; if(active) measure(active); });
+  },{passive:true});
   return {enabled:true};
 })();
 
@@ -2052,7 +2480,7 @@ function updateSceneTheme(light){
   if(lights.royal) lights.royal.intensity = light?1.0:2.0;
 }
 
-(function initThree(){
+function initThree(){
   const canvas=document.getElementById('three');
   if(!window.THREE||reduced){ if(canvas)canvas.style.opacity=0; return; }
 
@@ -2061,7 +2489,10 @@ function updateSceneTheme(light){
   const isMid     = !isCompact && cores<=8;
 
   renderer=new THREE.WebGLRenderer({canvas,antialias:!isCompact,alpha:false,powerPreference:'high-performance'});
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio,isCompact?1.5:2));
+  // resolution is the single biggest GPU cost in this scene; phones render
+  // at ~1.25x and mid machines at 1.6x, which is visually indistinguishable
+  // here (everything is soft glass and particles) and far cheaper to fill
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1, isCompact?1.25:(isMid?1.6:2)));
   const w=window.innerWidth,h=window.innerHeight;
   renderer.setSize(w,h); renderer.setClearColor(0x070C1B,1);
   // HDR-ish look: filmic tone mapping + correct colour space
@@ -2264,12 +2695,35 @@ function updateSceneTheme(light){
   }
 
   window.addEventListener('mousemove',e=>{ mouseX=(e.clientX/window.innerWidth-.5); mouseY=(e.clientY/window.innerHeight-.5); },{passive:true});
-  window.addEventListener('resize', debounce(()=>{
+  const resize=debounce(()=>{
     const w=window.innerWidth,h=window.innerHeight;
     camera.aspect=w/h; camera.updateProjectionMatrix(); renderer.setSize(w,h);
-  },150));
+  },150);
+  window.addEventListener('resize',resize);
+  window.addEventListener('orientationchange',resize);
+  /* release the GL context if the tab is backgrounded for a long time on
+     a memory-constrained device rather than holding it forever */
+  window.addEventListener('pagehide',()=>{ try{ renderer.setAnimationLoop(null); }catch(e){} });
+
+  /* Fade the first rendered frame up instead of snapping it in. The scroll
+     handler writes opacity every frame, so the transition is removed once
+     the reveal is done — otherwise it would lag the scroll fade. */
+  canvas.style.transition='opacity .9s var(--ease-soft)';
+  setTimeout(()=>{ canvas.style.transition=''; },1000);
+
+  /* A lost GL context (common when Android backgrounds a tab) would
+     otherwise leave a frozen or black canvas over the hero. */
+  canvas.addEventListener('webglcontextlost',ev=>{
+    ev.preventDefault();
+    document.documentElement.classList.add('no-scene');
+    console.warn('[truenorth] WebGL context lost — falling back to the CSS hero');
+  },false);
+
+  /* the theme may have been toggled while three.js was still downloading */
+  updateSceneTheme(document.documentElement.getAttribute('data-theme')==='light');
 
   const clock=new THREE.Clock();
+  let lastOpacity=-1;
   (function render(){
     requestAnimationFrame(render);
     if(document.hidden || !heroVisible) return;
@@ -2311,11 +2765,73 @@ function updateSceneTheme(light){
     camera.position.y += (-mouseY*2 - camera.position.y)*0.04;
     camera.position.z += ((14 - scrollFrac*2.4 + breathe) - camera.position.z)*0.05;
     camera.rotation.z = Math.sin(t*0.09)*0.006;
-    if(canvas) canvas.style.opacity = String(1 - scrollFrac*0.9);
+    const wantOpacity=+(1 - scrollFrac*0.9).toFixed(3);
+    if(canvas && wantOpacity!==lastOpacity){ canvas.style.opacity=String(wantOpacity); lastOpacity=wantOpacity; }
     camera.lookAt(0,0,0);
     renderer.render(scene,camera);
   })();
-})();
+}
+
+/* ============================================================
+   SCENE CAPABILITY GATE + DEMAND LOADING
+   The 3D hero is a luxury, not the message. A mid-range phone
+   that has to parse three.js and hold a WebGL context during
+   first paint scrolls badly for the rest of the session, so
+   such devices get the CSS hero instead and lose nothing they
+   can read. Capable machines still get the full scene, just
+   after the page is already interactive.
+   ============================================================ */
+function sceneShouldRun(){
+  if(reduced) return false;
+  const nav=navigator;
+  const conn=nav.connection||nav.mozConnection||nav.webkitConnection;
+  if(conn){
+    if(conn.saveData) return false;
+    if(/(^|-)(slow-2g|2g|3g)$/.test(conn.effectiveType||'')) return false;
+  }
+  if(typeof nav.deviceMemory==='number' && nav.deviceMemory<4) return false;
+  const cores=nav.hardwareConcurrency||8;
+  if(cores<=2) return false;
+  const shortEdge=Math.min(window.innerWidth,window.innerHeight);
+  if(shortEdge<=520 && cores<6) return false;   // low/mid phones stay 2D
+  if(!('WebGLRenderingContext' in window)) return false;
+  try{
+    const probe=document.createElement('canvas');
+    const gl=probe.getContext('webgl')||probe.getContext('experimental-webgl');
+    if(!gl) return false;
+    /* hand the context straight back — three.js will create its own, and
+       browsers cap how many may be live at once */
+    const lose=gl.getExtension('WEBGL_lose_context');
+    if(lose) lose.loseContext();
+  }catch(e){ return false; }
+  return true;
+}
+
+function bootScene(){
+  const html=document.documentElement;
+  if(!sceneShouldRun()){ html.classList.add('no-scene'); return; }
+  const tag=document.createElement('script');
+  tag.src='https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
+  tag.async=true; tag.crossOrigin='anonymous'; tag.referrerPolicy='no-referrer';
+  tag.onload=()=>{
+    try{ initThree(); }
+    catch(err){ console.warn('[truenorth] hero scene failed, using CSS fallback',err); html.classList.add('no-scene'); }
+  };
+  tag.onerror=()=>{ html.classList.add('no-scene'); };
+  document.head.appendChild(tag);
+}
+
+/* Called once the hero has painted (see the loader). A long idle timeout
+   would leave the hero visibly flat and then pop the scene in, so the wait
+   is short and there is a load-event backstop in case the loader never ran. */
+function scheduleScene(){
+  if(scheduleScene.done) return;
+  scheduleScene.done=true;
+  if('requestIdleCallback' in window) requestIdleCallback(bootScene,{timeout:700});
+  else setTimeout(bootScene,200);
+}
+if(document.readyState==='complete') setTimeout(scheduleScene,1200);
+else window.addEventListener('load',()=>setTimeout(scheduleScene,1200));
 </script>
 </body>
 </html>
