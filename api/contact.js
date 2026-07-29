@@ -141,7 +141,7 @@ module.exports = async function handler(req, res) {
       replyTo: email,
       subject: `New discovery call request from ${name}`,
       text: [
-        'New discovery call request from truenorthfinancial.com',
+        'New discovery call request from true-north-chi.vercel.app',
         '',
         `Name: ${name}`,
         `Email: ${email}`,
@@ -159,7 +159,7 @@ module.exports = async function handler(req, res) {
           <p style="margin:0 0 8px"><strong>Company:</strong> ${escapeHtml(company)}</p>
           <p style="margin:0 0 8px"><strong>Market:</strong> ${escapeHtml(country)}</p>
           <p style="margin:0 0 8px"><strong>Interested in:</strong> ${escapeHtml(service)}</p>
-          <p style="margin:20px 0 0;color:#666;font-size:12.5px">Submitted ${escapeHtml(submittedAt)} via truenorthfinancial.com</p>
+          <p style="margin:20px 0 0;color:#666;font-size:12.5px">Submitted ${escapeHtml(submittedAt)} via true-north-chi.vercel.app</p>
         </div>
       `,
     });
